@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TRONWELL · English Workshop · Speaking Practice A1–A2</title>
+<style>
+  :root{ --azul:#1d5392; --naranja:#ee8335; --gris:#575756; --soft:#f6f9fc; --verde:#2e7d4f; --rojo:#c0392b; }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Segoe UI',Roboto,Arial,sans-serif;background:#eef2f6;color:#2b2b2b;line-height:1.55;}
+  #app{max-width:1000px;margin:0 auto;background:#fff;min-height:100vh;box-shadow:0 0 30px rgba(0,0,0,.06);}
+  header{background:var(--azul);color:#fff;padding:14px 22px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:30;box-shadow:0 2px 8px rgba(0,0,0,.12);}
+  header .brand{font-size:19px;font-weight:800;letter-spacing:.5px;cursor:pointer;}
+  header .sub{font-size:11px;color:#cfe0f0;}
+  .bar{height:4px;background:var(--naranja);}
+  .progress-head{text-align:right;font-size:11px;color:#cfe0f0;}
+  .progress-head b{font-size:16px;color:#fff;display:block;}
+  /* HOME */
+  .home-hero{padding:24px 26px 8px;}
+  .home-hero h1{font-size:25px;color:var(--azul);font-weight:800;}
+  .home-hero p{color:var(--gris);font-size:14px;margin-top:4px;}
+  .home-pbar{height:8px;background:#e3e9f0;border-radius:4px;overflow:hidden;margin-top:12px;max-width:400px;}
+  .home-pfill{height:100%;background:var(--naranja);border-radius:4px;transition:width .5s;}
+  .home-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:0 26px 8px;max-width:600px;}
+  .stat{background:var(--soft);border-radius:10px;padding:10px 14px;}
+  .stat b{display:block;font-size:20px;color:var(--azul);}
+  .stat span{font-size:11px;color:var(--gris);}
+  .home-how{padding:4px 26px 0;}
+  .unit-label{padding:16px 26px 2px;font-size:12px;font-weight:800;color:var(--naranja);letter-spacing:1px;text-transform:uppercase;}
+  .mosaic{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:8px 26px 20px;}
+  .tile{position:relative;border-radius:14px;overflow:hidden;cursor:pointer;height:150px;box-shadow:0 3px 12px rgba(0,0,0,.1);transition:transform .16s,box-shadow .16s;background:linear-gradient(135deg,var(--azul),#2a6bb8);}
+  .tile:hover{transform:translateY(-3px);box-shadow:0 8px 20px rgba(29,83,146,.2);}
+  .tile img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.45;transition:opacity .2s;}
+  .tile:hover img{opacity:.55;}
+  .tile .ov{position:absolute;inset:0;background:linear-gradient(180deg,rgba(29,83,146,.10) 0%,rgba(29,83,146,.90) 100%);display:flex;flex-direction:column;justify-content:flex-end;padding:16px 18px;}
+  .tile .cnum{position:absolute;top:10px;left:10px;background:var(--naranja);color:#fff;font-size:11px;font-weight:800;padding:3px 10px;border-radius:12px;}
+  .tile .check{position:absolute;top:10px;right:10px;background:var(--verde);color:#fff;width:24px;height:24px;border-radius:50%;display:none;align-items:center;justify-content:center;font-size:13px;font-weight:800;}
+  .tile.done .check{display:flex;}
+  .tile .lvl{color:#ffcf8f;font-size:10px;font-weight:700;letter-spacing:.5px;}
+  .tile .nm{color:#fff;font-size:16px;font-weight:800;line-height:1.15;margin-top:3px;}
+  .tile .ns{color:rgba(255,255,255,.7);font-size:11px;margin-top:3px;}
+  /* BACK */
+  .back{display:inline-flex;align-items:center;gap:6px;background:#fff;color:var(--azul);border:none;font-weight:600;font-size:13px;cursor:pointer;padding:10px 20px;border-bottom:1px solid #e3e9f0;width:100%;justify-content:flex-start;font-family:inherit;}
+  .back:hover{background:var(--soft);}
+  /* LESSON HERO */
+  .lesson-hero{background:linear-gradient(135deg,var(--azul),#2a6bb8);padding:28px;color:#fff;}
+  .lesson-hero .cnum{color:#ffcf8f;font-size:12px;font-weight:700;letter-spacing:1px;margin-bottom:6px;}
+  .lesson-hero h2{font-size:26px;font-weight:800;line-height:1.1;}
+  .lesson-hero .u{color:#dce8f4;font-size:13px;margin-top:4px;}
+  .lesson-hero .goals{margin-top:14px;display:flex;flex-wrap:wrap;gap:8px;}
+  .lesson-hero .goal{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);border-radius:20px;padding:4px 12px;font-size:12px;color:#fff;}
+  .lesson-body{padding:20px 28px 30px;}
+  /* SESSION TABS */
+  .sess-tabs{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;}
+  .sess-tab{flex:1;min-width:120px;background:var(--soft);border:2px solid #e3e9f0;border-radius:12px;padding:10px 14px;cursor:pointer;transition:.15s;text-align:left;}
+  .sess-tab:hover{border-color:#cfe0f0;}
+  .sess-tab.active{border-color:var(--azul);background:#fff;box-shadow:0 3px 10px rgba(29,83,146,.12);}
+  .sess-tab .pt-t{font-size:13px;font-weight:800;color:var(--azul);}
+  .sess-tab .pt-s{font-size:11px;color:var(--gris);}
+  .sess-tab .pt-b{font-size:11px;color:var(--verde);font-weight:700;margin-top:2px;}
+  /* BLOCK */
+  .block{margin:14px 0;border:1px solid #eef2f6;border-radius:12px;overflow:hidden;}
+  .block-head{display:flex;align-items:center;gap:10px;padding:11px 16px;background:var(--soft);border-bottom:1px solid #eef2f6;}
+  .block-head .bico{width:28px;height:28px;border-radius:8px;background:var(--azul);color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
+  .block-head .bt{font-size:14px;font-weight:700;color:var(--azul);flex:1;}
+  .block-head .bmin{font-size:11px;font-weight:700;color:var(--naranja);background:#fdf0e6;padding:3px 9px;border-radius:10px;}
+  .block-body{padding:16px;}
+  .ex-toc{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;}
+  .ex-toc span{font-size:11.5px;background:var(--soft);border:1px solid #e3e9f0;border-radius:12px;padding:3px 10px;color:var(--azul);font-weight:600;}
+  .ex-toc span b{color:var(--naranja);}
+  .ex-sub{font-size:13px;color:var(--gris);margin:0 0 12px;}
+  .ex-sub i{font-size:12px;}
+  .q-item{background:#fff;border:1px solid #e3e9f0;border-radius:10px;padding:12px 15px;margin-bottom:9px;}
+  .chip{background:var(--azul);color:#fff;border:none;border-radius:7px;padding:7px 12px;font-size:13px;user-select:none;font-family:inherit;display:inline-block;}
+  /* SCORE PANEL */
+  .score-panel{background:linear-gradient(135deg,var(--azul),#2a6bb8);border-radius:12px;padding:18px 22px;margin-top:18px;color:#fff;text-align:center;}
+  .score-panel .sp-n{font-size:36px;font-weight:900;}
+  .score-panel .sp-l{font-size:13px;color:#cfe0f0;margin-top:2px;}
+  .score-panel .sp-msg{font-size:14px;margin-top:8px;color:#ffcf8f;font-weight:700;}
+  /* NAV */
+  .lesson-nav{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:24px;padding-top:18px;border-top:1px solid #eef2f6;}
+  .btn{background:var(--azul);color:#fff;border:none;border-radius:8px;padding:11px 20px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;}
+  .btn.ghost{background:#fff;color:var(--azul);border:1px solid #dbe6f2;}
+  .btn:hover{filter:brightness(1.08);}
+  footer{background:var(--soft);border-top:3px solid var(--naranja);padding:16px 22px;text-align:center;font-size:12px;color:var(--gris);}
+  footer b{color:var(--azul);}
+  .reset-link{color:#a9b6c6;font-size:11px;cursor:pointer;text-decoration:underline;margin-top:6px;display:inline-block;}
+  /* SPEAKING */
+  .how{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+  .how .step{background:var(--soft);border-radius:10px;padding:12px 14px;font-size:13px;}
+  .how .step b{display:block;color:var(--azul);font-size:14px;margin-bottom:2px;}
+  .es{color:var(--gris);font-size:12px;font-style:italic;}
+  .sys{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:14px;}
+  .model-line{font-size:12.5px;color:var(--gris);margin-top:10px;}
+  .model-line b{color:var(--azul);}
+  .mbar{height:6px;background:#e3e9f0;border-radius:3px;overflow:hidden;margin-top:6px;max-width:320px;}
+  .mbar i{display:block;height:100%;background:var(--naranja);width:0;transition:width .3s;}
+  .model-banner{background:#fdf7f1;border:1px solid #f3ddc6;border-radius:10px;padding:10px 14px;margin-bottom:14px;font-size:13px;color:#c96a1b;}
+  .model-banner b{color:#c96a1b;}
+  .model-banner.ok{background:#e8f5ed;border-color:#cfe8d6;color:var(--verde);}
+  .model-banner.ok b{color:var(--verde);}
+  .model-banner.err{background:#fdecec;border-color:#f3c4c4;color:var(--rojo);}
+  .model-banner:empty{display:none;}
+  .sp-head{display:flex;gap:10px;align-items:flex-start;}
+  .sp-head .n{color:var(--naranja);font-weight:800;min-width:16px;font-size:14.5px;line-height:1.6;}
+  .sp-body{flex:1;min-width:0;}
+  .sp-text{font-size:17px;font-weight:600;color:#2b2b2b;line-height:1.55;}
+  .sp-hint{font-size:11.5px;color:var(--gris);font-style:italic;margin-top:3px;}
+  .sp-answer{font-size:16px;font-weight:600;margin-top:8px;}
+  .best{font-size:11px;font-weight:700;color:var(--gris);background:var(--soft);border-radius:10px;padding:2px 9px;white-space:nowrap;}
+  .best.ok{color:var(--verde);background:#e8f5ed;}
+  .gap{display:inline-block;min-width:64px;border-bottom:2px solid var(--azul);color:var(--azul);text-align:center;margin:0 3px;}
+  .gap.filled{border-color:var(--verde);color:var(--verde);padding:0 4px;}
+  .opt-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;}
+  .opt-chip{background:var(--soft);border:2px solid #e3e9f0;border-radius:8px;padding:3px 12px;font-size:13.5px;font-weight:600;color:var(--azul);}
+  .opt-chip.right{border-color:var(--verde);background:#e8f5ed;color:var(--verde);}
+  .opt-chip.said{border-color:#d05353;background:#fdecec;color:var(--rojo);text-decoration:line-through;}
+  .word-pool{display:flex;flex-wrap:wrap;gap:6px;}
+  .sp-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;padding-left:26px;}
+  .sbtn{display:inline-flex;align-items:center;gap:6px;border:1px solid #dbe6f2;background:#fff;color:var(--azul);border-radius:8px;padding:7px 13px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;}
+  .sbtn:hover{background:var(--soft);}
+  .sbtn.mic{background:var(--naranja);border-color:var(--naranja);color:#fff;}
+  .sbtn.mic:hover{filter:brightness(1.06);background:var(--naranja);}
+  .sbtn.mic.rec{background:#d05353;border-color:#d05353;animation:pulse 1.2s infinite;}
+  .sbtn[disabled],body.busy .sbtn.mic:not(.rec){opacity:.45;cursor:not-allowed;pointer-events:none;}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(208,83,83,.45)}70%{box-shadow:0 0 0 10px rgba(208,83,83,0)}100%{box-shadow:0 0 0 0 rgba(208,83,83,0)}}
+  .sp-out{padding-left:26px;}
+  .sp-out:empty{display:none;}
+  .live{display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin-top:10px;font-size:13px;color:var(--rojo);font-weight:600;}
+  .meter{display:inline-block;width:120px;height:8px;background:#e3e9f0;border-radius:4px;overflow:hidden;}
+  .meter i{display:block;height:100%;width:0;background:var(--verde);transition:width .08s;}
+  .spin{width:16px;height:16px;border:2px solid #e3e9f0;border-top-color:var(--azul);border-radius:50%;animation:rot .8s linear infinite;display:inline-block;flex-shrink:0;}
+  @keyframes rot{to{transform:rotate(360deg)}}
+  .wait{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin-top:10px;font-size:13px;color:var(--gris);}
+  .res{margin-top:10px;border-top:1px dashed #e3e9f0;padding-top:10px;}
+  .res-top{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+  .pill{font-size:15px;font-weight:900;border-radius:20px;padding:2px 12px;color:#fff;}
+  .pill.hi{background:var(--verde);} .pill.mid{background:var(--naranja);} .pill.lo{background:#d05353;}
+  .res-msg{font-size:13.5px;font-weight:700;}
+  .res-msg.hi{color:var(--verde);} .res-msg.mid{color:#c96a1b;} .res-msg.lo{color:var(--rojo);}
+  .res-line{font-size:13.5px;margin-top:6px;color:#333;}
+  .heard{font-size:12.5px;color:var(--gris);margin-top:6px;}
+  .heard i{color:#333;}
+  .w-ok{color:var(--verde);} .w-close{color:#c96a1b;text-decoration:underline dotted;} .w-miss{color:#d05353;text-decoration:line-through;}
+  .w-blank{border-bottom:2px solid currentColor;}
+  .legend{font-size:11px;color:var(--gris);margin-top:6px;display:flex;gap:12px;flex-wrap:wrap;}
+  .legend span::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:4px;vertical-align:middle;}
+  .legend .l-ok::before{background:var(--verde);} .legend .l-close::before{background:var(--naranja);} .legend .l-miss::before{background:#d05353;}
+  .notice{background:#fdecec;border:1px solid #f3c4c4;border-radius:8px;padding:10px 12px;font-size:13px;color:var(--rojo);margin-top:10px;}
+  .notice.ok{background:#e8f5ed;border-color:#cfe8d6;color:var(--verde);}
+  .notice a{color:var(--azul);font-weight:700;}
+  .linkbtn{background:none;border:none;color:var(--azul);font-weight:700;text-decoration:underline;cursor:pointer;font:inherit;padding:0;}
+  @media(max-width:600px){.mosaic{grid-template-columns:1fr}.sess-tabs{flex-direction:column}.how{grid-template-columns:1fr}.home-stats{grid-template-columns:1fr 1fr 1fr}.lesson-body{padding:16px 14px 24px}.sp-actions,.sp-out{padding-left:0}.sp-text{font-size:16px}}
+</style></head>
+<body><div id="app">
+<header>
+  <div><div class="brand" onclick="goHome()">TRONWELL</div><div class="sub">English Workshop · Speaking Practice A1–A2</div></div>
+  <div class="progress-head"><b id="pgCount">0 / 180</b>phrases mastered</div>
+</header>
+<div class="bar"></div>
+<div id="view"></div>
+<footer><b>TRONWELL</b> · English Workshop · Speaking Practice A1–A2 · 4 Units · 12 Sessions · 180 Phrases
+  <br>🔒 Your voice is processed on your device — it is not sent to any server. · Tu voz se procesa en tu equipo y no se envía a ningún servidor.
+  <br><span class="reset-link" onclick="resetProgress()">Reset my progress</span></footer>
+</div>
+<noscript><p style="padding:20px;text-align:center">Activa JavaScript para usar Speaking Practice.</p></noscript>
+
+<script>
+/* ===================================================== CONFIG */
+// Optional: public address of this page (used in the "open in a new tab" link when the microphone is blocked).
+const APP_URL = "";
+// whisper-tiny.en: ~40 MB and about 3x faster. "Xenova/whisper-base.en" (~75 MB) is more precise but slow on basic computers.
+const ASR_MODEL = "Xenova/whisper-tiny.en";
+const TRANSFORMERS_URL = "https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.2";
+const PASS = 70;
+
+const UNIT_IMGS = {
+  1:"https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&w=700",
+  2:"https://images.pexels.com/photos/1181406/pexels-photo-1181406.jpeg?auto=compress&cs=tinysrgb&w=700",
+  3:"https://images.pexels.com/photos/3184360/pexels-photo-3184360.jpeg?auto=compress&cs=tinysrgb&w=700",
+  4:"https://images.pexels.com/photos/669615/pexels-photo-669615.jpeg?auto=compress&cs=tinysrgb&w=700"
+};
+
+/* Each session: pron = read aloud · order = say the words in order · complete = choose the word and say the sentence */
+const UNITS = [
+/* ===================================================== UNIT 1 */
+{
+  n:1, level:"A1", title:"Getting Started",
+  goals:["Introduce yourself","Talk about your job","Ask for contact details"],
+  sessions_data:[
+  { n:1, code:"S1", title:"Introducing Yourself",
+    pron:["Hello, my name is Maria. I'm a manager.","Nice to meet you, too.","I'm Chilean. I'm from Santiago.","This is my colleague, Carlos. He's an engineer.","She's an accountant and she's from Peru."],
+    order:["I am an engineer.","She is from Brazil.","Are you the new assistant?","This is my colleague.","We are not from Argentina."],
+    complete:[
+      {s:"He is ___ accountant.", a:"an", d:["a","the"], hint:"vowel sound"},
+      {s:"___ you from Chile?", a:"Are", d:["Is","Am"]},
+      {s:"My colleagues ___ from Mexico.", a:"are", d:["is","am"]},
+      {s:"I ___ a designer.", a:"am", d:["is","are"]},
+      {s:"She ___ a lawyer. She's an engineer.", a:"isn't", d:["aren't","not"], hint:"negative"}
+    ]},
+  { n:2, code:"S2", title:"Your Job & Department",
+    pron:["I work in the sales department.","She works for a big company.","My boss is very friendly.","Do you work in marketing?","Finance is responsible for paying salaries."],
+    order:["I work for a bank.","Does she work in marketing?","He doesn't work on Fridays.","My colleague works in IT.","They work in the same team."],
+    complete:[
+      {s:"She ___ in the finance department.", a:"works", d:["work","working"]},
+      {s:"___ you work in sales?", a:"Do", d:["Does","Are"]},
+      {s:"He ___ work on Saturdays.", a:"doesn't", d:["don't","isn't"], hint:"negative"},
+      {s:"I work ___ a technology company.", a:"for", d:["of","on"]},
+      {s:"___ your boss work from home?", a:"Does", d:["Do","Is"]}
+    ]},
+  { n:3, code:"S3", title:"Numbers, Contact & Details",
+    pron:["What's your phone number?","Can you repeat that, please?","Can you spell your surname, please?","My email is maria at gmail dot com.","Sorry, can you speak more slowly?"],
+    order:["Where are you from?","What is your email address?","Who is your manager?","Can you spell that, please?","How do you spell your name?"],
+    complete:[
+      {s:"___ is your manager?", a:"Who", d:["Where","What"], hint:"a person"},
+      {s:"___ are you from?", a:"Where", d:["Who","What"], hint:"a place"},
+      {s:"Can you ___ that, please?", a:"repeat", d:["repeating","to repeat"], hint:"say it again"},
+      {s:"___ is your phone number?", a:"What", d:["Who","Where"]},
+      {s:"My email is carlos ___ gmail dot com.", a:"at", d:["in","on"], hint:"@"}
+    ]}
+  ]
+},
+/* ===================================================== UNIT 2 */
+{
+  n:2, level:"A1", title:"At the Office",
+  goals:["Describe your office","Talk about your routine","Make polite requests"],
+  sessions_data:[
+  { n:4, code:"S4", title:"The Office & Things",
+    pron:["There is a printer next to the door.","There are two meeting rooms on this floor.","My laptop is on the desk.","Is there a kitchen in the office?","The meeting room is between the kitchen and reception."],
+    order:["There is a computer on the desk.","The printer is next to the window.","Are there any chairs in the room?","My bag is under the chair.","There isn't a printer here."],
+    complete:[
+      {s:"There ___ three desks in the office.", a:"are", d:["is","be"]},
+      {s:"There ___ a meeting at ten o'clock.", a:"is", d:["are","be"]},
+      {s:"The laptop is ___ the desk.", a:"on", d:["in","under"], hint:"on top of"},
+      {s:"___ there a printer on this floor?", a:"Is", d:["Are","It"]},
+      {s:"The kitchen is ___ to reception.", a:"next", d:["between","under"]}
+    ]},
+  { n:5, code:"S5", title:"Daily Routines",
+    pron:["I usually start work at nine o'clock.","She always checks her emails in the morning.","We have lunch at one o'clock.","I never work on Sundays.","What time do you finish work?"],
+    order:["I always check my emails first.","She usually has lunch at the office.","What time do you start work?","We have a meeting on Mondays.","He is never late for work."],
+    complete:[
+      {s:"She ___ work at six o'clock.", a:"finishes", d:["finish","finishing"]},
+      {s:"We have a meeting ___ Monday.", a:"on", d:["in","at"], hint:"days"},
+      {s:"I have a break ___ eleven o'clock.", a:"at", d:["on","in"], hint:"clock time"},
+      {s:"What time ___ you start work?", a:"do", d:["does","are"]},
+      {s:"My boss ___ have lunch at the office.", a:"doesn't", d:["don't","isn't"], hint:"negative"}
+    ]},
+  { n:6, code:"S6", title:"Abilities & Requests",
+    pron:["Could you send me the file, please?","I can use Excel very well.","Sorry, I can't come to the meeting today.","Of course, no problem.","Can you book a meeting room for tomorrow?"],
+    order:["Could you help me, please?","She can speak three languages.","I can't open the file.","Can you print this document?","Could you call the client?"],
+    complete:[
+      {s:"___ you send me the report, please?", a:"Could", d:["Are","Do"]},
+      {s:"She can ___ English very well.", a:"speak", d:["speaks","to speak"]},
+      {s:"I ___ come today. I'm very busy.", a:"can't", d:["can","could"], hint:"negative"},
+      {s:"Could you print this, ___?", a:"please", d:["sorry","thanks"]},
+      {s:"Can you drive? — Yes, I ___.", a:"can", d:["do","am"], hint:"short answer"}
+    ]}
+  ]
+},
+/* ===================================================== UNIT 3 */
+{
+  n:3, level:"A2", title:"Work & Experience",
+  goals:["Talk about past jobs","Describe past projects","Say what you are doing now"],
+  sessions_data:[
+  { n:7, code:"S7", title:"Talking about the Past",
+    pron:["I joined the company two years ago.","Before that, I worked in a bank.","We went to a conference in Lima last month.","She was an assistant in her first job.","They were very happy with the results."],
+    order:["I started my job last year.","She left the company in March.","We had a meeting yesterday.","He was a sales assistant.","They moved to a new office last month."],
+    complete:[
+      {s:"I ___ the company in March.", a:"joined", d:["join","joins"]},
+      {s:"We ___ to the conference last week.", a:"went", d:["go","going"]},
+      {s:"They ___ at the meeting yesterday.", a:"were", d:["was","are"]},
+      {s:"I started this job three years ___.", a:"ago", d:["last","before"]},
+      {s:"We ___ a lot of work last week.", a:"had", d:["have","has"]}
+    ]},
+  { n:8, code:"S8", title:"Projects & Achievements",
+    pron:["Did you finish the report?","We didn't meet the deadline.","The project was a big success.","When did you start the project?","We delivered everything on time."],
+    order:["Did you meet the deadline?","We didn't finish on time.","When did the project start?","Was the meeting successful?","They achieved their goal."],
+    complete:[
+      {s:"___ you finish the report yesterday?", a:"Did", d:["Do","Were"]},
+      {s:"We ___ meet the deadline.", a:"didn't", d:["don't","weren't"], hint:"negative"},
+      {s:"Did they ___ the product on time?", a:"deliver", d:["delivered","delivers"]},
+      {s:"___ the project successful? — Yes, it was.", a:"Was", d:["Did","Were"]},
+      {s:"What ___ you do last week?", a:"did", d:["do","does"]}
+    ]},
+  { n:9, code:"S9", title:"Now & Around Now",
+    pron:["I'm working on a new project this week.","She's preparing a presentation right now.","We're helping the marketing team at the moment.","What are you working on?","He usually works from home, but today he's in the office."],
+    order:["I am preparing the report.","What are you doing right now?","She is talking to a client.","We are working on a new campaign.","Is he working from home today?"],
+    complete:[
+      {s:"I ___ preparing the budget right now.", a:"am", d:["is","are"]},
+      {s:"She usually ___ in the sales department.", a:"works", d:["is working","work"], hint:"routine"},
+      {s:"This week we ___ helping the IT team.", a:"are", d:["is","do"]},
+      {s:"Right now, the printer is ___ again.", a:"working", d:["work","works"]},
+      {s:"He ___ working today. He's on holiday.", a:"isn't", d:["doesn't","not"], hint:"negative"}
+    ]}
+  ]
+},
+/* ===================================================== UNIT 4 */
+{
+  n:4, level:"A2", title:"Plans & Comparisons",
+  goals:["Talk about future plans","Compare options","Talk about results"],
+  sessions_data:[
+  { n:10, code:"S10", title:"Future Plans",
+    pron:["We're going to launch the product next month.","I'm going to call the client tomorrow.","Are you going to attend the meeting?","Next year, we're going to open a new office.","She isn't going to travel next week."],
+    order:["We are going to hire two people.","Are you going to call the client?","I am going to finish the report tomorrow.","She is going to lead the new team.","What are you going to do next week?"],
+    complete:[
+      {s:"We ___ going to launch the product in May.", a:"are", d:["is","am"]},
+      {s:"I'm going ___ send the report tomorrow.", a:"to", d:["for","at"]},
+      {s:"___ she going to lead the project?", a:"Is", d:["Are","Does"]},
+      {s:"They aren't going to ___ new people this year.", a:"hire", d:["hiring","hired"]},
+      {s:"What are you going to do ___ week?", a:"next", d:["last","ago"]}
+    ]},
+  { n:11, code:"S11", title:"Comparing Options",
+    pron:["This supplier is cheaper than the other one.","Their delivery is faster than ours.","Supplier B is more reliable.","This is the best option for our company.","I recommend Supplier A because it's cheaper."],
+    order:["This option is cheaper.","Supplier A is faster than Supplier B.","This is the most expensive product.","Which supplier is the best?","Our new office is bigger than the old one."],
+    complete:[
+      {s:"This laptop is ___ than the old one.", a:"faster", d:["more fast","fastest"]},
+      {s:"This is the ___ expensive option.", a:"most", d:["more","much"]},
+      {s:"The results are ___ than last year.", a:"better", d:["more good","best"]},
+      {s:"Supplier A is cheaper ___ Supplier B.", a:"than", d:["that","as"]},
+      {s:"It's the ___ option. We can't use it.", a:"worst", d:["worse","best"]}
+    ]},
+  { n:12, code:"S12", title:"Quantities & Results",
+    pron:["Our sales increased by fifteen percent.","We have completed the first phase.","How many clients do we have?","We don't have much time.","Costs decreased this quarter."],
+    order:["How much time do we have?","We have some good ideas.","She has sent the proposal.","Sales increased last month.","Do you have any questions?"],
+    complete:[
+      {s:"How ___ clients do we have?", a:"many", d:["much","any"], hint:"countable"},
+      {s:"We don't have ___ problems.", a:"any", d:["some","much"], hint:"negative"},
+      {s:"She ___ sent the report.", a:"has", d:["have","is"]},
+      {s:"How ___ money do we need?", a:"much", d:["many","few"], hint:"uncountable"},
+      {s:"Sales ___ by ten percent last year.", a:"increased", d:["increase","increasing"]}
+    ]}
+  ]
+}
+];
+
+/* ===================================================== TEXT MATCHING */
+const CONTR={"i'm":"i am","you're":"you are","we're":"we are","they're":"they are","he's":"he is","she's":"she is","it's":"it is",
+  "that's":"that is","there's":"there is","here's":"here is","what's":"what is","where's":"where is","who's":"who is","how's":"how is","let's":"let us",
+  "isn't":"is not","aren't":"are not","wasn't":"was not","weren't":"were not","don't":"do not","doesn't":"does not","didn't":"did not",
+  "can't":"can not","cannot":"can not","couldn't":"could not","won't":"will not","wouldn't":"would not","haven't":"have not","hasn't":"has not",
+  "i've":"i have","you've":"you have","we've":"we have","they've":"they have","i'll":"i will","you'll":"you will","we'll":"we will","they'll":"they will",
+  "i'd":"i would","gonna":"going to","wanna":"want to"};
+const HOMO=[["to","two","too"],["for","four"],["there","their"],["here","hear"],["right","write"],["by","buy","bye"],["no","know"],
+  ["one","won"],["new","knew"],["meet","meat"],["week","weak"],["our","hour"],["eight","ate"],["than","then"],["b","be","bee"]];
+const HOMO_MAP={}; HOMO.forEach(g=>g.forEach(w=>HOMO_MAP[w]=g[0]));
+const ONES=["zero","one","two","three","four","five","six","seven","eight","nine","ten","eleven","twelve","thirteen","fourteen","fifteen","sixteen","seventeen","eighteen","nineteen"];
+const TENS=["","","twenty","thirty","forty","fifty","sixty","seventy","eighty","ninety"];
+function numWords(s){
+  const n=parseInt(s,10); if(isNaN(n)) return "";
+  if(n<20) return ONES[n];
+  if(n<100) return TENS[Math.floor(n/10)]+(n%10?" "+ONES[n%10]:"");
+  if(n<1000) return ONES[Math.floor(n/100)]+" hundred"+(n%100?" "+numWords(n%100):"");
+  if(n<1000000) return numWords(Math.floor(n/1000))+" thousand"+(n%1000?" "+numWords(n%1000):"");
+  return String(s).split("").map(d=>ONES[+d]).join(" ");
+}
+// Normalises a sentence into comparable tokens: lowercase, contractions expanded, digits spelled out.
+function toks(text){
+  let t=" "+String(text||"").toLowerCase()+" ";
+  t=t.replace(/[’‘`´]/g,"'");
+  t=t.replace(/\[[^\]]*\]|\([^)]*\)|\*[^*]*\*/g," ");
+  t=t.replace(/\b([ap])\.\s?m\.?(?![a-z])/g," $1m ");
+  t=t.replace(/(\d)([ap]m)\b/g,"$1 $2");
+  t=t.replace(/(\d+):(\d\d)/g,(m,h,mm)=>" "+h+" "+(mm==="00"?"":mm)+" ");
+  t=t.replace(/(\d+)\s*%/g,"$1 percent ");
+  t=t.replace(/\bper cent\b/g,"percent");
+  t=t.replace(/@/g," at ");
+  t=t.replace(/([a-z0-9])\.(?=[a-z])/g,"$1 dot ");
+  t=t.replace(/\be-mail/g,"email").replace(/\bok\b/g,"okay").replace(/&/g," and ");
+  t=t.replace(/(\d),(\d{3})/g,"$1$2");
+  t=t.replace(/\d+/g,m=>" "+numWords(m)+" ");
+  t=t.replace(/[-–—_/]/g," ");
+  t=t.replace(/[^a-z' ]+/g," ");
+  const out=[];
+  t.split(/\s+/).forEach(w=>{
+    w=w.replace(/^'+|'+$/g,""); if(!w) return;
+    if(CONTR[w]){ out.push(...CONTR[w].split(" ")); return; }
+    out.push(w.replace(/'/g,""));
+  });
+  return out;
+}
+function canon(w){ return HOMO_MAP[w]||w; }
+function lev(a,b){
+  if(a===b) return 0; if(!a.length) return b.length; if(!b.length) return a.length;
+  let prev=[]; for(let j=0;j<=b.length;j++) prev[j]=j;
+  for(let i=1;i<=a.length;i++){ const row=[i];
+    for(let j=1;j<=b.length;j++) row[j]=Math.min(prev[j]+1,row[j-1]+1,prev[j-1]+(a[i-1]===b[j-1]?0:1));
+    prev=row; }
+  return prev[b.length];
+}
+function wsim(a,b){ if(!a||!b) return 0; if(a===b||canon(a)===canon(b)) return 1; return 1-lev(a,b)/Math.max(a.length,b.length); }
+function sameSeq(x,y){ if(x.length!==y.length) return false; return x.every((w,k)=>canon(w)===canon(y[k])); }
+function countSeq(hay,needle){
+  if(!needle.length) return 0; let c=0;
+  for(let i=0;i+needle.length<=hay.length;i++) if(sameSeq(hay.slice(i,i+needle.length),needle)) c++;
+  return c;
+}
+// Word-level alignment (edit distance) between the expected tokens T and the heard tokens H.
+function align(T,H){
+  const n=T.length,m=H.length,INS=0.7,DEL=1,D=[],B=[];
+  for(let i=0;i<=n;i++){ D.push(new Array(m+1).fill(0)); B.push(new Array(m+1).fill(0)); }
+  for(let i=1;i<=n;i++){ D[i][0]=i*DEL; B[i][0]=1; }
+  for(let j=1;j<=m;j++){ D[0][j]=j*INS; B[0][j]=2; }
+  for(let i=1;i<=n;i++) for(let j=1;j<=m;j++){
+    const s=wsim(T[i-1],H[j-1]); let best=D[i-1][j-1]+(s>=0.5?1-s:1.3), b=0;
+    if(D[i-1][j]+DEL<best){ best=D[i-1][j]+DEL; b=1; }
+    if(D[i][j-1]+INS<best){ best=D[i][j-1]+INS; b=2; }
+    D[i][j]=best; B[i][j]=b;
+  }
+  const tm=new Array(n).fill(null), ins=[]; let i=n,j=m;
+  while(i>0||j>0){
+    const b=(i>0&&j>0)?B[i][j]:(i>0?1:2);
+    if(b===0){ tm[i-1]={j:j-1,w:H[j-1],s:wsim(T[i-1],H[j-1])}; i--; j--; }
+    else if(b===1){ i--; }
+    else { ins.push({j:j-1,w:H[j-1],anchor:i}); j--; }
+  }
+  return {tm, ins:ins.reverse()};
+}
+function credit(s){ return s>=0.85?1:s>=0.5?0.6:0; }
+function pronScore(T,A){
+  if(!T.length) return 0;
+  let c=0; A.tm.forEach(x=>{ if(x) c+=credit(x.s); });
+  const pen=Math.min(0.3,A.ins.length*0.5/T.length);
+  return Math.max(0,Math.round(100*(c/T.length-pen)));
+}
+// Splits the display sentence into words and remembers which tokens belong to each word.
+function buildTarget(segs){
+  const words=[],T=[]; let blank=[0,0];
+  segs.forEach(sg=>{
+    const start=T.length;
+    String(sg.text).split(/(\s+)/).forEach(p=>{
+      if(!p) return;
+      if(!p.trim()){ words.push({raw:p,space:true}); return; }
+      const idx=toks(p).map(t=>{ T.push(t); return T.length-1; });
+      words.push({raw:p,idx,blank:!!sg.blank});
+    });
+    if(sg.blank) blank=[start,T.length];
+  });
+  return {words,T,blank};
+}
+function colorHtml(tg,A){
+  return tg.words.map(w=>{
+    if(w.space) return w.raw;
+    if(!w.idx.length) return esc(w.raw);
+    const ss=w.idx.map(k=>A.tm[k]?A.tm[k].s:0);
+    const st=ss.every(s=>s>=0.85)?"ok":ss.every(s=>s<0.5)?"miss":"close";
+    return `<span class="w-${st}${w.blank?" w-blank":""}">${esc(w.raw)}</span>`;
+  }).join("");
+}
+function evaluate(it,heard){
+  const H=toks(heard);
+  if(it.type!=="c"){
+    const tg=buildTarget([{text:it.text}]), A=align(tg.T,H);
+    let score=pronScore(tg.T,A), moved=false;
+    if(it.type==="o"){
+      // A word that was said, but not in its place, means the order is wrong: never a pass.
+      const extra=A.ins.map(x=>x.w);
+      moved=tg.T.some((t,k)=>!(A.tm[k]&&A.tm[k].s>=0.5)&&extra.some(w=>wsim(t,w)>=0.85));
+      if(moved) score=Math.min(score,60);
+    }
+    return {heard,score,pass:score>=PASS,moved,html:colorHtml(tg,A)};
+  }
+  const parts=it.s.split("___");
+  const tg=buildTarget([{text:parts[0]},{text:it.a,blank:true},{text:parts[1]||""}]);
+  const A=align(tg.T,H), pron=pronScore(tg.T,A), b0=tg.blank[0], b1=tg.blank[1];
+  const js=new Set();
+  for(let k=b0;k<b1;k++) if(A.tm[k]) js.add(A.tm[k].j);
+  A.ins.forEach(x=>{ if(x.anchor>=b0&&x.anchor<=b1) js.add(x.j); });
+  const span=[...js].sort((x,y)=>x-y).map(j=>H[j]);
+  const ans=toks(it.a), dists=it.d.map(d=>({d,t:toks(d)}));
+  let chosen=null;
+  if(span.length&&sameSeq(span,ans)) chosen="ok";
+  if(!chosen){ const hit=dists.find(x=>span.length&&sameSeq(span,x.t)); if(hit) chosen=hit.d; }
+  if(!chosen){
+    // Fallback: count occurrences in the whole answer (ignoring the ones that belong to the rest of the sentence).
+    const outside=tg.T.slice(0,b0).concat(["|"],tg.T.slice(b1));
+    if(countSeq(H,ans)>countSeq(outside,ans)) chosen="ok";
+    else { const hit=dists.find(x=>countSeq(H,x.t)>countSeq(outside,x.t)); if(hit) chosen=hit.d; }
+  }
+  if(!chosen&&span.length){
+    const sp=span.join(" "), sa=wsim(sp,ans.join(" "));
+    if(sa>=0.8&&!dists.some(x=>wsim(sp,x.t.join(" "))>=sa)) chosen="ok";
+  }
+  const score=chosen==="ok"?Math.round(50+pron*0.5):chosen?Math.min(30,Math.round(pron*0.3)):Math.min(50,Math.round(pron*0.5));
+  return {heard,score,pass:chosen==="ok"&&score>=PASS,chosen,html:colorHtml(tg,A)};
+}
+
+/* ===================================================== ENGINE */
+const LS_BEST="tws_a1a2_best";
+let BEST={}, cur=null, curSess=null;
+try{ const s=localStorage.getItem(LS_BEST); if(s) BEST=JSON.parse(s)||{}; }catch(e){}
+function saveBest(){ try{localStorage.setItem(LS_BEST,JSON.stringify(BEST));}catch(e){} }
+function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+function shuffle(a){ a=a.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+function shuffleWords(text){
+  const w=text.replace(/[.?!]+$/,"").replace(/,/g,"").split(/\s+/); let s,k=0;
+  do{ s=shuffle(w); k++; }while(s.join(" ")===w.join(" ")&&k<20);
+  return s;
+}
+const IN_FRAME=(()=>{ try{ return window.self!==window.top; }catch(e){ return true; } })();
+const ITEMS={}, ST={}, SESS_IDS={}, UNIT_IDS={};
+UNITS.forEach(U=>{ UNIT_IDS[U.n]=[]; U.sessions_data.forEach(S=>{
+  const ids=[];
+  S.pron.forEach((t,i)=>{ const id=`${S.n}_p_${i}`; ITEMS[id]={id,type:"p",sess:S.n,i,text:t}; ids.push(id); });
+  S.order.forEach((t,i)=>{ const id=`${S.n}_o_${i}`; ITEMS[id]={id,type:"o",sess:S.n,i,text:t,words:shuffleWords(t)}; ids.push(id); });
+  S.complete.forEach((c,i)=>{ const id=`${S.n}_c_${i}`; ITEMS[id]={id,type:"c",sess:S.n,i,s:c.s,a:c.a,d:c.d,hint:c.hint,text:c.s.replace("___",c.a),opts:shuffle([c.a].concat(c.d))}; ids.push(id); });
+  SESS_IDS[S.n]=ids; UNIT_IDS[U.n]=UNIT_IDS[U.n].concat(ids);
+}); });
+const ALL_IDS=Object.keys(ITEMS), TOTAL=ALL_IDS.length;
+function mastered(ids){ return ids.filter(id=>(BEST[id]||0)>=PASS).length; }
+function avgOf(ids){ const p=ids.filter(id=>BEST[id]!=null); return p.length?Math.round(p.reduce((a,id)=>a+BEST[id],0)/p.length):0; }
+function curUnit(){ return UNITS.find(u=>u.n===cur); }
+function curS(){ const U=curUnit(); return U?U.sessions_data.find(s=>s.n===curSess):null; }
+function allSessions(){ return UNITS.flatMap(u=>u.sessions_data.map(s=>({u:u.n,s:s.n,code:s.code}))); }
+
+function paintProgress(){ const el=document.getElementById("pgCount"); if(el) el.textContent=mastered(ALL_IDS)+" / "+TOTAL; }
+function resetProgress(){ if(confirm("Reset all your speaking scores?")){ BEST={}; saveBest(); for(const k in ST) delete ST[k]; goHome(); } }
+function goHome(){ cancelRec(); cur=null; curSess=null; renderHome(); window.scrollTo({top:0}); }
+function openUnit(n,sn){ cancelRec(); cur=n; const U=curUnit(); curSess=sn||U.sessions_data[0].n; renderUnit(); window.scrollTo({top:0}); loadASR().catch(()=>{}); }
+function openSess(n){ cancelRec(); curSess=n; renderUnit(); window.scrollTo({top:0}); }
+function goSess(u,s){ if(u===cur) openSess(s); else openUnit(u,s); }
+
+function block(ico,title,min,bodyHtml){
+  return `<div class="block"><div class="block-head"><span class="bico">${ico}</span><span class="bt">${title}</span><span class="bmin">${min}</span></div><div class="block-body">${bodyHtml}</div></div>`;
+}
+
+function renderHome(){
+  const v=document.getElementById("view");
+  const m=mastered(ALL_IDS), practised=ALL_IDS.filter(id=>BEST[id]!=null).length;
+  const how=`<div class="how">
+      <div class="step"><b>1 · Listen 🔊</b>Listen to the model sentence.<div class="es">Escucha la frase modelo.</div></div>
+      <div class="step"><b>2 · Speak 🎙️</b>Press <b style="display:inline;font-size:13px">Record</b> and say the sentence.<div class="es">Presiona Record y di la frase en voz alta.</div></div>
+      <div class="step"><b>3 · Check ✓</b>See your score and try again.<div class="es">Revisa tu puntaje y vuelve a intentarlo.</div></div></div>
+    <div class="sys"><button class="sbtn" onclick="testMic()">🎙️ Test my microphone</button><span class="es">Prueba tu micrófono antes de empezar.</span></div>
+    <div id="micTest"></div>
+    <div class="model-line" id="modelLine"></div>`;
+  let html=`<div class="home-hero"><h1>Speaking Practice 🎙️</h1>
+    <p>4 units · 12 sessions · ${TOTAL} phrases · A1–A2 · Pronunciation · Word order · Complete &amp; say</p>
+    <div class="home-pbar"><div class="home-pfill" style="width:${m/TOTAL*100}%"></div></div>
+    <p style="font-size:12px;margin-top:5px;color:var(--gris)">${m} of ${TOTAL} phrases mastered (score ${PASS}+)</p></div>
+    <div class="home-stats"><div class="stat"><b>${practised} / ${TOTAL}</b><span>phrases practised</span></div>
+    <div class="stat"><b>${m}</b><span>phrases mastered</span></div>
+    <div class="stat"><b>${avgOf(ALL_IDS)}</b><span>average score</span></div></div>
+    <div class="home-how">${block("🎙️","How it works","3 steps",how)}</div>`;
+  ["A1","A2"].forEach(lv=>{
+    html+=`<div class="unit-label">Level ${lv}</div><div class="mosaic">`;
+    UNITS.filter(u=>u.level===lv).forEach(u=>{
+      const ids=UNIT_IDS[u.n], um=mastered(ids);
+      html+=`<div class="tile ${um===ids.length?"done":""}" onclick="openUnit(${u.n})">
+        <img src="${UNIT_IMGS[u.n]}" alt="${esc(u.title)}" loading="lazy" onerror="this.style.display='none'">
+        <div class="cnum">Unit ${u.n}</div><div class="check">✓</div>
+        <div class="ov"><div class="lvl">LEVEL ${u.level} · ${u.sessions_data.length} SESSIONS · ${ids.length} PHRASES</div>
+        <div class="nm">${u.title}</div>
+        <div class="ns">${um} / ${ids.length} phrases mastered</div></div></div>`;
+    });
+    html+="</div>";
+  });
+  v.innerHTML=html; paintProgress(); paintModel();
+}
+
+function renderUnit(){
+  const U=curUnit(), S=curS(), v=document.getElementById("view");
+  let tabs='<div class="sess-tabs">';
+  U.sessions_data.forEach(s=>{
+    tabs+=`<div class="sess-tab ${s.n===curSess?"active":""}" onclick="openSess(${s.n})">
+      <div class="pt-t">${s.code} · ${s.title}</div>
+      <div class="pt-s">${SESS_IDS[s.n].length} phrases</div><div class="pt-b" id="tabb_${s.n}">${tabLabel(s.n)}</div></div>`;
+  });
+  tabs+="</div>";
+  const list=type=>SESS_IDS[S.n].filter(id=>ITEMS[id].type===type).map(id=>`<div class="q-item" id="it_${id}">${itemHtml(id)}</div>`).join("");
+  const seq=allSessions(), pos=seq.findIndex(x=>x.s===S.n), prev=seq[pos-1], next=seq[pos+1];
+  const prevB=prev?`<button class="btn ghost" onclick="goSess(${prev.u},${prev.s})">‹ ${prev.code}</button>`:"<span></span>";
+  const nextB=next?`<button class="btn" onclick="goSess(${next.u},${next.s})">${next.code} ›</button>`:`<button class="btn" onclick="goHome()">Finish ✓</button>`;
+  v.innerHTML=`
+    <button class="back" onclick="goHome()">‹ All units</button>
+    <div class="lesson-hero"><div class="cnum">UNIT ${U.n} · LEVEL ${U.level} · SPEAKING PRACTICE</div><h2>${U.title}</h2>
+      <div class="u">${S.code} · ${S.title}</div><div class="goals">${U.goals.map(g=>`<span class="goal">🎙️ ${g}</span>`).join("")}</div></div>
+    <div class="lesson-body">
+      ${tabs}
+      <div class="model-banner" id="modelBanner"></div>
+      <div class="ex-toc"><span><b>5</b> Pronunciation</span><span><b>5</b> Word order</span><span><b>5</b> Complete &amp; say</span></div>
+      ${block("🎧","Pronunciation · Read aloud","5 phrases",`<div class="ex-sub">Listen, then press <b>Record</b> and read the sentence aloud.<br><i>Escucha el modelo, presiona Record y lee la frase en voz alta.</i></div>${list("p")}`)}
+      ${block("🧩","Word Order · Say it","5 phrases",`<div class="ex-sub">Put the words in order in your head and <b>say the complete sentence</b>.<br><i>Ordena las palabras mentalmente y di la frase completa.</i></div>${list("o")}`)}
+      ${block("✏️","Complete &amp; Say","5 phrases",`<div class="ex-sub">Choose the correct word and <b>say the complete sentence</b>.<br><i>Elige la palabra correcta y di la frase completa.</i></div>${list("c")}`)}
+      <div class="score-panel" id="sessScore"></div>
+      <div class="lesson-nav">${prevB}${nextB}</div>
+    </div>`;
+  paintSession(); paintModel();
+}
+function tabLabel(sn){ const ids=SESS_IDS[sn], m=mastered(ids); return ids.some(id=>BEST[id]!=null)?`${m} / ${ids.length} mastered`:""; }
+function paintSession(){
+  const S=curS(); if(!S) return;
+  const ids=SESS_IDS[S.n], m=mastered(ids), pr=ids.filter(id=>BEST[id]!=null).length;
+  const el=document.getElementById("sessScore");
+  if(el){
+    const msg=m===ids.length?"🎉 Session complete! Excellent work!":m>=10?"👍 Great progress — keep practising.":pr?"💪 Keep going — you can do it!":"Start with phrase 1 🙂 · Empieza por la frase 1";
+    el.innerHTML=`<div class="sp-n">${m} / ${ids.length}</div><div class="sp-l">phrases mastered in ${S.code} (score ${PASS}+)${pr?` · average score ${avgOf(ids)}`:""}</div><div class="sp-msg">${msg}</div>`;
+  }
+  const tb=document.getElementById("tabb_"+S.n); if(tb) tb.textContent=tabLabel(S.n);
+  paintProgress();
+}
+
+/* ---- items ---- */
+function msgFor(sc){ return sc>=90?["hi","🎉 Excellent!"]:sc>=PASS?["hi","👍 Well done!"]:sc>=50?["mid","📚 Almost there — try again!"]:["lo","💪 Try again — speak slowly and clearly."]; }
+function isRevealed(it,st){ const R=st.res; return !!R&&(it.type==="p"||R.pass||R.chosen==="ok"||(st.att||0)>=2); }
+function itemHtml(id){
+  const it=ITEMS[id], st=ST[id]||{}, R=st.res, reveal=isRevealed(it,st), best=BEST[id];
+  const recNow=rec&&rec.id===id, working=st.state==="proc"||st.state==="wait";
+  let body="";
+  if(it.type==="p"){
+    body=`<div class="sp-text">${R?R.html:esc(it.text)}</div>`;
+  } else if(it.type==="o"){
+    body=`<div class="word-pool">${it.words.map(w=>`<span class="chip">${esc(w)}</span>`).join("")}</div>`;
+    if(/\?\s*$/.test(it.text)) body+=`<div class="sp-hint">It's a question (?) · Es una pregunta</div>`;
+    if(st.hint&&!reveal) body+=`<div class="sp-hint">💡 Starts with: <b>${esc(it.text.split(/\s+/)[0].replace(/[^A-Za-z']/g,""))}</b></div>`;
+    if(reveal) body+=`<div class="sp-answer">${R.pass?"✓ ":"Answer · Respuesta: "}<span class="w-ok">${esc(it.text)}</span></div>`;
+  } else {
+    const p=it.s.split("___");
+    const gap=reveal?`<span class="gap filled">${esc(it.a)}</span>`:`<span class="gap">&nbsp;</span>`;
+    body=`<div class="sp-text">${esc(p[0])}${gap}${esc(p[1]||"")}</div>${it.hint?`<div class="sp-hint">(${esc(it.hint)})</div>`:""}
+      <div class="opt-row">${it.opts.map(o=>{ let c=""; if(R){ if(reveal&&o===it.a) c="right"; else if(R.chosen&&R.chosen!=="ok"&&o===R.chosen) c="said"; } return `<span class="opt-chip ${c}">${esc(o)}</span>`; }).join("")}</div>`;
+  }
+  const bestTag=best!=null?`<span class="best ${best>=PASS?"ok":""}">${best>=PASS?"✓ ":""}Best ${best}</span>`:"";
+  let acts="";
+  if(it.type==="p") acts+=`<button class="sbtn" onclick="speak('${id}',0.9)">🔊 Listen</button><button class="sbtn" onclick="speak('${id}',0.65)">🐢 Slow</button>`;
+  acts+=recNow?`<button class="sbtn mic rec" onclick="toggleRec('${id}')">⏹ Stop</button>`
+             :`<button class="sbtn mic" onclick="toggleRec('${id}')" ${working?"disabled":""}>🎙️ ${R?"Try again":"Record"}</button>`;
+  if(it.type==="o"&&!reveal&&!st.hint) acts+=`<button class="sbtn" onclick="showHint('${id}')">💡 Hint</button>`;
+  if(it.type!=="p"&&reveal) acts+=`<button class="sbtn" onclick="speak('${id}',0.9)">🔊 Listen</button>`;
+  if(st.url&&!recNow&&!working) acts+=`<button class="sbtn" onclick="playMine('${id}')">▶ My voice</button>`;
+  let out="";
+  if(recNow) out=`<div class="live">🔴 Listening… speak now <span class="meter"><i id="lvl_${id}"></i></span><span id="tm_${id}">0s</span></div><div class="sp-hint">It stops automatically when you finish. · Se detiene solo cuando terminas de hablar.</div>`;
+  else if(st.state==="wait") out=`<div class="wait"><span class="spin"></span>Preparing voice recognition… <b class="mpct">${ASR.pct}%</b><span class="es">(solo la primera vez)</span></div>`;
+  else if(st.state==="proc") out=`<div class="wait"><span class="spin"></span>Checking your answer… <span class="es">Revisando tu respuesta…</span></div>`;
+  else if(st.err) out=`<div class="notice">${st.err}</div>`;
+  else if(R) out=resultHtml(it,st,reveal);
+  return `<div class="sp-head"><span class="n">${it.i+1}</span><div class="sp-body">${body}</div>${bestTag}</div><div class="sp-actions">${acts}</div><div class="sp-out">${out}</div>`;
+}
+function resultHtml(it,st,reveal){
+  const R=st.res, mf=msgFor(R.score), cls=R.pass?"hi":mf[0];
+  let msg=R.pass?mf[1]:(it.type==="c"&&R.chosen&&R.chosen!=="ok")?"✗ Not quite.":mf[1];
+  let lines="";
+  if(it.type==="o"){
+    lines=R.pass?`<div class="res-line">✓ Correct order!</div>`
+      :R.moved?`<div class="res-line">↕ Check the order of the words. <span class="es">Revisa el orden de las palabras.</span></div>`
+      :`<div class="res-line">Some words are missing or not clear. <span class="es">Faltan palabras o no se escucharon bien.</span></div>`;
+  } else if(it.type==="c"){
+    if(R.chosen==="ok") lines=R.pass?`<div class="res-line">✓ Correct word: <b>${esc(it.a)}</b></div>`
+      :`<div class="res-line">✓ Correct word! Now say the whole sentence more clearly. <span class="es">¡Palabra correcta! Ahora di la frase completa con más claridad.</span></div>`;
+    else if(R.chosen) lines=`<div class="res-line">✗ You said <b>${esc(R.chosen)}</b>. ${reveal?`The correct word is <b>${esc(it.a)}</b>.`:`Try another option. <span class="es">Prueba otra opción.</span>`}</div>`;
+    else lines=`<div class="res-line">We couldn't hear the missing word clearly. <span class="es">No escuchamos bien la palabra que falta.</span></div>`;
+  }
+  if(!R.pass&&!reveal) lines+=`<div class="sp-hint">After 2 attempts you will see the answer. · Después de 2 intentos verás la respuesta.</div>`;
+  const legend=it.type==="p"?`<div class="legend"><span class="l-ok">clear</span><span class="l-close">almost</span><span class="l-miss">missing / different</span></div>`:"";
+  return `<div class="res"><div class="res-top"><span class="pill ${cls}">${R.score}</span><span class="res-msg ${cls}">${msg}</span></div>
+    ${lines}<div class="heard">We heard: “<i>${esc(R.heard)}</i>”</div>${legend}</div>`;
+}
+function renderItem(id){ const el=document.getElementById("it_"+id); if(el) el.innerHTML=itemHtml(id); }
+function showHint(id){ (ST[id]||(ST[id]={})).hint=true; renderItem(id); }
+function playMine(id){ const st=ST[id]; if(st&&st.url){ try{ speechSynthesis.cancel(); }catch(e){} new Audio(st.url).play().catch(()=>{}); } }
+
+/* ---- text to speech ---- */
+let VOICE=null;
+function pickVoice(){
+  if(VOICE) return VOICE;
+  const vs=speechSynthesis.getVoices()||[];
+  VOICE=vs.find(v=>/^en[-_]US/i.test(v.lang)&&/(Google|Samantha|Aria|Jenny|Guy|Natural)/i.test(v.name))||vs.find(v=>/^en[-_]US/i.test(v.lang))||vs.find(v=>/^en/i.test(v.lang))||null;
+  return VOICE;
+}
+if("speechSynthesis" in window) speechSynthesis.onvoiceschanged=()=>{ VOICE=null; };
+function speak(id,rate){
+  if(!("speechSynthesis" in window)){ alert("Tu navegador no puede leer frases en voz alta."); return; }
+  speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(ITEMS[id].text); u.lang="en-US"; u.rate=rate||0.9;
+  const v=pickVoice(); if(v) u.voice=v;
+  speechSynthesis.speak(u);
+}
+
+/* ---- voice recognition (Whisper, runs in the browser) ---- */
+const ASR={status:"idle",pct:0,err:""}; const FILES={}; let asrP=null;
+function loadASR(){
+  if(asrP) return asrP;
+  ASR.status="loading"; ASR.pct=0; paintModel();
+  asrP=(async()=>{
+    const T=await import(TRANSFORMERS_URL);
+    T.env.allowLocalModels=false; T.env.useBrowserCache=true;
+    const p=await T.pipeline("automatic-speech-recognition",ASR_MODEL,{quantized:true,progress_callback:d=>{
+      if(d&&d.status==="progress"&&d.file&&d.total){
+        FILES[d.file]={l:d.loaded||0,t:d.total}; let l=0,t=0;
+        Object.values(FILES).forEach(f=>{ l+=f.l; t+=f.t; });
+        const pct=Math.min(99,Math.floor(l/t*100)); if(pct!==ASR.pct){ ASR.pct=pct; paintModel(); }
+      }
+    }});
+    ASR.status="ready"; ASR.pct=100; paintModel(); return p;
+  })();
+  asrP.catch(e=>{ ASR.status="error"; ASR.err=String(e&&e.message||e); asrP=null; paintModel(); });
+  return asrP;
+}
+function modelText(){
+  if(ASR.status==="ready") return `✓ <b>Voice recognition ready.</b> <span class="es">Reconocimiento de voz listo.</span>`;
+  if(ASR.status==="loading") return `⏳ <b>Preparing voice recognition… ${ASR.pct}%</b> — only the first time. <span class="es">Se descarga solo la primera vez (puede tardar 1–2 minutos).</span><div class="mbar"><i style="width:${ASR.pct}%"></i></div>`;
+  if(ASR.status==="error") return `⚠️ No se pudo descargar el reconocimiento de voz. Revisa tu conexión a internet y <button class="linkbtn" onclick="location.reload()">recarga la página</button>.`;
+  return `Voice recognition downloads automatically the first time you practise. <span class="es">El reconocimiento de voz se descarga solo la primera vez.</span>`;
+}
+function paintModel(){
+  const b=document.getElementById("modelBanner");
+  if(b){ b.className="model-banner"+(ASR.status==="ready"?" ok":ASR.status==="error"?" err":""); b.innerHTML=ASR.status==="idle"?"":modelText(); }
+  const h=document.getElementById("modelLine"); if(h) h.innerHTML=modelText();
+  document.querySelectorAll(".mpct").forEach(e=>e.textContent=ASR.pct+"%");
+}
+
+/* ---- microphone ---- */
+const NO_SPEECH="🎙️ We didn't hear you. Speak a little louder, close to the microphone. · No te escuchamos: habla un poco más fuerte y cerca del micrófono.";
+function openTabLink(){
+  const u=APP_URL||(/^https?:/.test(location.href)&&!/googleusercontent|sites\.google/.test(location.hostname)?location.href:"");
+  return u?` <a href="${esc(u)}" target="_blank" rel="noopener">Abrir la práctica en una pestaña nueva ↗</a>`:"";
+}
+function micPrecheck(){
+  if(!window.isSecureContext) return "🔒 El micrófono solo funciona si la página se abre con <b>https://</b>."+openTabLink();
+  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia) return "🔒 Este navegador no permite usar el micrófono aquí."+openTabLink();
+  if(typeof MediaRecorder==="undefined") return "Tu navegador no puede grabar audio. Usa Chrome, Edge o Safari actualizados.";
+  return null;
+}
+function micErrorMsg(e){
+  const n=e&&e.name||"";
+  if(n==="NotAllowedError"||n==="SecurityError"||n==="PermissionDeniedError"){
+    if(IN_FRAME) return "🔒 El micrófono está bloqueado dentro de esta página."+(openTabLink()||" Abre la práctica en una pestaña nueva.");
+    return "🔒 No hay permiso para usar el micrófono. Haz clic en el candado 🔒 junto a la dirección web, elige <b>Permitir</b> micrófono y vuelve a intentarlo.";
+  }
+  if(n==="NotFoundError"||n==="DevicesNotFoundError") return "🎙️ No encontramos un micrófono. Conecta uno (o usa audífonos con micrófono) e inténtalo de nuevo.";
+  if(n==="NotReadableError"||n==="TrackStartError") return "🎙️ Otra aplicación está usando el micrófono (Zoom, Teams, Meet…). Ciérrala e inténtalo de nuevo.";
+  return "No se pudo usar el micrófono: "+esc(e&&e.message||n);
+}
+let rec=null, busyId=null;
+function setBusy(id){ busyId=id; document.body.classList.toggle("busy",!!id); }
+async function toggleRec(id){
+  if(rec){ if(rec.id===id) stopRec(); return; }
+  if(busyId) return;
+  const st=ST[id]||(ST[id]={}); st.err=null;
+  const pre=micPrecheck(); if(pre){ st.err=pre; renderItem(id); return; }
+  loadASR().catch(()=>{});
+  setBusy(id);
+  let stream;
+  try{ stream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true,autoGainControl:true}}); }
+  catch(e){ st.err=micErrorMsg(e); setBusy(null); renderItem(id); return; }
+  try{ speechSynthesis.cancel(); }catch(e){}
+  const AC=window.AudioContext||window.webkitAudioContext, ctx=new AC();
+  try{ await ctx.resume(); }catch(e){}
+  const an=ctx.createAnalyser(); an.fftSize=512; ctx.createMediaStreamSource(stream).connect(an);
+  const mr=new MediaRecorder(stream), r={id,stream,ctx,an,mr,chunks:[],t0:Date.now(),speech:false,sp0:0,sil:null,floor:0.01,raf:0};
+  mr.ondataavailable=e=>{ if(e.data&&e.data.size) r.chunks.push(e.data); };
+  mr.onstop=()=>finishRec(r);
+  rec=r; mr.start(); st.state="rec"; renderItem(id); vad(r);
+}
+// Detects when the student stops talking (same approach as the original exercises).
+function vad(r){
+  const buf=new Uint8Array(r.an.fftSize);
+  const loop=()=>{
+    if(rec!==r) return;
+    r.an.getByteTimeDomainData(buf);
+    let s=0; for(let i=0;i<buf.length;i++){ const v=(buf[i]-128)/128; s+=v*v; }
+    const rms=Math.sqrt(s/buf.length), el=Date.now()-r.t0;
+    if(el<300) r.floor=Math.max(r.floor,rms);
+    const th=Math.max(r.floor*2.5,0.015);
+    if(rms>th){ if(!r.speech){ r.speech=true; r.sp0=Date.now(); } r.sil=null; }
+    else if(r.speech){ if(r.sil===null) r.sil=Date.now(); if(Date.now()-r.sil>1600&&Date.now()-r.sp0>500) return stopRec(); }
+    if(el>15000) return stopRec();
+    if(!r.speech&&el>8000){ r.noSpeech=true; return stopRec(); }
+    const lv=document.getElementById("lvl_"+r.id); if(lv) lv.style.width=Math.min(100,rms*400)+"%";
+    const tm=document.getElementById("tm_"+r.id); if(tm) tm.textContent=Math.floor(el/1000)+"s";
+    r.raf=requestAnimationFrame(loop);
+  };
+  r.raf=requestAnimationFrame(loop);
+}
+function stopRec(){
+  const r=rec; if(!r) return; rec=null;
+  cancelAnimationFrame(r.raf);
+  const st=ST[r.id]; st.state=r.cancel?null:"proc";
+  try{ if(r.mr.state!=="inactive") r.mr.stop(); else finishRec(r); }catch(e){ finishRec(r); }
+  r.stream.getTracks().forEach(t=>t.stop());
+  try{ r.ctx.close(); }catch(e){}
+  renderItem(r.id);
+}
+function cancelRec(){ if(rec){ rec.cancel=true; stopRec(); } }
+async function finishRec(r){
+  if(r.done) return; r.done=true;
+  const id=r.id, st=ST[id];
+  if(r.cancel){ st.state=null; setBusy(null); renderItem(id); return; }
+  try{
+    const blob=new Blob(r.chunks,{type:r.mr.mimeType||"audio/webm"});
+    if(st.url) URL.revokeObjectURL(st.url);
+    st.url=URL.createObjectURL(blob);
+    if(r.noSpeech) throw {user:NO_SPEECH};
+    await transcribe(id,blob);
+  }catch(e){
+    st.state=null;
+    st.err=e&&e.user?e.user:ASR.status==="error"?"⚠️ No se pudo descargar el reconocimiento de voz. Revisa tu conexión a internet y vuelve a intentarlo."
+      :"⚠️ No se pudo procesar el audio: "+esc(e&&e.message||e);
+  }
+  setBusy(null); renderItem(id); paintSession();
+}
+function resample(input,from,to){
+  if(from===to) return input;
+  const ratio=from/to, len=Math.round(input.length/ratio), out=new Float32Array(len);
+  for(let i=0;i<len;i++){ const x=i*ratio, lo=Math.floor(x), hi=Math.min(lo+1,input.length-1), f=x-lo; out[i]=input[lo]*(1-f)+input[hi]*f; }
+  return out;
+}
+async function decode16k(blob){
+  const buf=await blob.arrayBuffer(), AC=window.AudioContext||window.webkitAudioContext;
+  let ctx; try{ ctx=new AC({sampleRate:16000}); }catch(e){ ctx=new AC(); }
+  const ab=await new Promise((res,rej)=>{ const p=ctx.decodeAudioData(buf,res,rej); if(p&&p.then) p.then(res,rej); });
+  let d=ab.getChannelData(0); if(ab.sampleRate!==16000) d=resample(d,ab.sampleRate,16000);
+  try{ ctx.close(); }catch(e){}
+  return d;
+}
+async function transcribe(id,blob){
+  const st=ST[id]||(ST[id]={});
+  const audio=await decode16k(blob);
+  let peak=0; for(let i=0;i<audio.length;i++){ const v=Math.abs(audio[i]); if(v>peak) peak=v; }
+  if(audio.length<16000*0.3||peak<0.02) throw {user:NO_SPEECH};
+  if(ASR.status!=="ready"){ st.state="wait"; renderItem(id); }
+  const asr=await loadASR();
+  st.state="proc"; renderItem(id);
+  await new Promise(r=>setTimeout(r,30));
+  const out=await asr(audio);
+  const text=String(out&&out.text||"").replace(/\[[^\]]*\]|\([^)]*\)/g," ").replace(/\s+/g," ").trim();
+  const low=text.toLowerCase().replace(/[.!?,]/g,"").trim();
+  if(!toks(text).length||["you","thank you","thanks for watching","thanks","bye"].includes(low)) throw {user:NO_SPEECH};
+  const R=evaluate(ITEMS[id],text);
+  st.att=(st.att||0)+1; st.res=R; st.state=null; st.err=null;
+  if(BEST[id]==null||R.score>BEST[id]){ BEST[id]=R.score; saveBest(); }
+}
+async function testMic(){
+  const el=document.getElementById("micTest"); if(!el) return;
+  const pre=micPrecheck(); if(pre){ el.innerHTML=`<div class="notice">${pre}</div>`; return; }
+  loadASR().catch(()=>{});
+  let stream;
+  try{ stream=await navigator.mediaDevices.getUserMedia({audio:true}); }
+  catch(e){ el.innerHTML=`<div class="notice">${micErrorMsg(e)}</div>`; return; }
+  el.innerHTML=`<div class="live" style="color:var(--azul)">Say something… · Di algo en inglés… <span class="meter"><i id="lvl_test"></i></span></div>`;
+  const AC=window.AudioContext||window.webkitAudioContext, ctx=new AC(); try{ await ctx.resume(); }catch(e){}
+  const an=ctx.createAnalyser(); an.fftSize=512; ctx.createMediaStreamSource(stream).connect(an);
+  const buf=new Uint8Array(an.fftSize), t0=Date.now(); let peak=0;
+  await new Promise(done=>{ const loop=()=>{
+    an.getByteTimeDomainData(buf); let s=0; for(let i=0;i<buf.length;i++){ const v=(buf[i]-128)/128; s+=v*v; }
+    const rms=Math.sqrt(s/buf.length); peak=Math.max(peak,rms);
+    const lv=document.getElementById("lvl_test"); if(lv) lv.style.width=Math.min(100,rms*400)+"%";
+    if(Date.now()-t0<3500) requestAnimationFrame(loop); else done(); }; requestAnimationFrame(loop); });
+  stream.getTracks().forEach(t=>t.stop()); try{ ctx.close(); }catch(e){}
+  el.innerHTML=peak>0.03?`<div class="notice ok">✓ Your microphone works! · ¡Tu micrófono funciona!</div>`
+    :`<div class="notice">We couldn't hear anything. Check that the right microphone is selected and not muted. · No escuchamos nada: revisa que el micrófono correcto esté seleccionado y no esté silenciado.</div>`;
+}
+
+/* ---- start ---- */
+(()=>{ const u=parseInt(new URLSearchParams(location.search).get("unit"),10); if(u>=1&&u<=UNITS.length) openUnit(u); else goHome(); })();
+</script>
+</body></html>
