@@ -149,6 +149,27 @@
   .notice a{color:var(--azul);font-weight:700;}
   .linkbtn{background:none;border:none;color:var(--azul);font-weight:700;text-decoration:underline;cursor:pointer;font:inherit;padding:0;}
   @media(max-width:600px){.mosaic{grid-template-columns:1fr}.sess-tabs{flex-direction:column}.how{grid-template-columns:1fr}.home-stats{grid-template-columns:1fr 1fr 1fr}.lesson-body{padding:16px 14px 24px}.sp-actions,.sp-out{padding-left:0}.sp-text{font-size:16px}}
+  .lvsw{display:flex;gap:8px;padding:14px 26px 0;flex-wrap:wrap;}
+  .lvsw a{flex:1;min-width:150px;text-decoration:none;border:2px solid #e3e9f0;border-radius:12px;padding:10px 14px;color:#333;background:var(--soft);}
+  .lvsw a b{display:block;font-size:15px;color:var(--azul);} .lvsw a span{font-size:11.5px;color:var(--gris);}
+  .lvsw a.on{border-color:var(--naranja);background:#fff;box-shadow:0 3px 10px rgba(0,0,0,.08);}
+  .free-q{font-size:16px;font-weight:700;color:#333;}
+  .pic-box{display:flex;gap:14px;flex-wrap:wrap;align-items:flex-start;}
+  .pic-box img{width:300px;max-width:100%;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,.12);}
+  .pic-box .pt{flex:1;min-width:200px;}
+  .pic-box small{display:block;font-size:10.5px;color:var(--gris);margin-top:4px;}
+  .kw{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px;}
+  .kw span{font-size:12px;border-radius:12px;padding:2px 9px;background:#f1f3f6;color:#666;}
+  .kw span.hit{background:#e8f5ed;color:var(--verde);font-weight:700;}
+  .model-ans{margin-top:8px;background:#eef7f0;border:1px solid #cfe8d6;border-radius:8px;padding:8px 12px;font-size:13.5px;}
+  body.lv2{--azul:#c45f17;--naranja:#1d5392;--soft:#fdf8f3;background:#f6efe7;}
+  body.lv2 .es{display:none!important;}
+  body.lv2 header{background:linear-gradient(90deg,#c45f17,#ee8335);}
+  body.lv2 .tile{background:linear-gradient(135deg,#c45f17,#ee8335);}
+  body.lv2 .tile .ov{background:linear-gradient(180deg,rgba(154,69,16,.10) 0%,rgba(154,69,16,.9) 100%);}
+  body.lv2 .lesson-hero,body.lv2 .score-panel{background:linear-gradient(135deg,#c45f17,#ee8335);}
+  body.lv2 .tile .lvl,body.lv2 .lesson-hero .cnum,body.lv2 .score-panel .sp-msg{color:#ffe0c2;}
+  body.lv2 .bar{background:#1d5392;}
 </style></head>
 <body><div id="app">
 <header>
@@ -166,7 +187,7 @@
 <script>
 /* ===================================================== CONFIG */
 // Optional: public address of this page (used in the "open in a new tab" link when the microphone is blocked).
-const APP_URL = "";
+const APP_URL = "https://laboratorio-cmd.github.io/speaking-practice/";
 // whisper-tiny.en: ~40 MB and about 3x faster. "Xenova/whisper-base.en" (~75 MB) is more precise but slow on basic computers.
 const ASR_MODEL = "Xenova/whisper-tiny.en";
 const TRANSFORMERS_URL = "https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.2";
@@ -180,7 +201,7 @@ const UNIT_IMGS = {
 };
 
 /* Each session: pron = read aloud · order = say the words in order · complete = choose the word and say the sentence */
-const UNITS = [
+const UNITS_A1A2 = [
 /* ===================================================== UNIT 1 */
 {
   n:1, level:"A1", title:"Getting Started",
@@ -332,6 +353,18 @@ const UNITS = [
 ];
 
 /* ===================================================== TEXT MATCHING */
+/* ===================================================== LEVEL A2–B1 (Intensive English Workshop A2–B1)
+   Each session also has: ask = answer a question freely · pic = describe a picture. Keywords decide the score. */
+const UNITS_A2B1 = [{"n":1,"level":"A2+","title":"Communicating at Work","goals":["Write clear emails and give updates using the present perfect","Make polite requests and offers on the phone and in video calls","Give opinions, agree and disagree politely in meetings"],"sessions_data":[{"n":1,"code":"L1","title":"Emails & Messages","pron":["I've just sent the report to the London office.","Have you read the email from the new client yet?","I am writing to confirm our meeting on Thursday.","Please find the price list attached to this email.","Thank you for your email. Kind regards, Marco."],"order":["I have just replied to Laura.","Have you attached the invoice yet?","Could you forward the invoice to Carla?","We haven't confirmed the date yet.","Thank you for your quick reply."],"complete":[{"s":"I've ___ finished the weekly report.","a":"just","d":["yet","ago"],"hint":"very recently"},{"s":"Has Laura replied ___?","a":"yet","d":["ago","just"],"hint":"question"},{"s":"Marco ___ sent the presentation.","a":"has","d":["have","is"]},{"s":"I am writing to ___ our meeting on Thursday.","a":"confirm","d":["reply","forward"]},{"s":"Please find the price list ___.","a":"attached","d":["attach","attaching"]}],"ask":[{"q":"What have you already done at work today? Tell me three things.","keys":[["already"],["i've","have","ive"],["sent","answered","replied","finished","written","called","read"],["email","emails","report","message","messages","client"],["just","also"]],"min":15,"model":"Today I've already answered about twenty emails. I've also finished the weekly report, and I've just called a client."},{"q":"You are writing to a new client. How do you start and finish the email? What do you write in the first line?","keys":[["dear"],["writing","write"],["confirm","purpose","inform"],["kind","regards"],["thank","thanks"]],"min":15,"model":"I start with 'Dear Ms. Bennett' and I thank her for her email. In the first line I write the purpose: 'I am writing to confirm our meeting.' I finish with 'Kind regards'."}],"pic":{"query":"office email laptop","prompt":"Describe the picture: who you can see, where they are, what they are doing and what they have just done.","keys":[["man","person"],["office","desk"],["laptop","computer"],["papers","documents","email","emails"],["colleagues","people"],["just","has","have"]],"min":25,"model":"In this picture, a man is working at his desk in a busy office. He is looking at some papers and there is a laptop in front of him. Some colleagues are working behind him. I think he has just printed an email from a client and now he is checking the details.","img":"img/a2b1/pic_L1.jpg","credit":"Photo: “LRO Orbit Insertion Preparations - Craig Tooley” by NASA Goddard Photo and Video · CC BY 2.0 · via Openverse"}},{"n":2,"code":"L2","title":"Phone Calls & Video Meetings","pron":["Sorry about that. Can you hear me now?","Could you repeat the last part, please?","Would you mind speaking a little more slowly?","Let me check with my manager and I'll call you back.","Shall I share my screen with the presentation?"],"order":["Could you send me the catalogue?","Would you mind spelling your name?","I'll send you the quote by email.","Shall I call you back?","Your voice is breaking up."],"complete":[{"s":"Could you ___ that, please?","a":"repeat","d":["repeating","to repeat"]},{"s":"Would you mind ___ a moment?","a":"waiting","d":["wait","to wait"],"hint":"verb + -ing"},{"s":"___ I share my screen?","a":"Shall","d":["Am","Have"],"hint":"offer"},{"s":"Sorry, you're on ___. We can't hear you.","a":"mute","d":["hold","line"]},{"s":"Don't worry. I'll ___ you back in an hour.","a":"call","d":["calling","to call"]}],"ask":[{"q":"Your client's connection is bad, and you didn't hear the price. What do you say?","keys":[["sorry"],["could","would"],["repeat","repeating","again"],["breaking","connection","hear"],["price","number"]],"min":12,"model":"Sorry, your voice is breaking up. Could you repeat the price, please? I didn't hear the number."},{"q":"A client needs a quote today. Offer to help and say what you will do next.","keys":[["i'll","will","ill"],["send","email","call"],["quote","price"],["today","afternoon","hour","tomorrow"],["check","manager","shall"]],"min":14,"model":"No problem. Let me check with my manager, and I'll call you back in an hour. I'll send you the quote by email this afternoon."}],"pic":{"query":"video conference call","prompt":"Describe the picture: who you can see, where they are, what they are doing and what problems they might have.","keys":[["woman","person"],["video","call","meeting","chat"],["laptop","computer","screen"],["home","living","room"],["typing","looking","talking","listening"],["could","would","connection","hear","repeat"]],"min":25,"model":"In this picture, a woman is sitting in her living room with a laptop. She is in a video call, and I can see a small picture of another person on the screen. She is typing and looking at the screen. Maybe the connection is bad and she is asking, 'Could you repeat that, please?'","img":"img/a2b1/pic_L2.jpg","credit":"Photo: “living room video chat” by MattHurst · CC BY-SA 2.0 · via Openverse"}},{"n":3,"code":"L3","title":"Opinions in Meetings","pron":["In my opinion, an online shop is a great idea.","I see your point, but we should think about the costs.","I agree with Ana that clients want more options.","Why don't we start with a small pilot for three months?","That's a good idea, and a pilot is less risky."],"order":["We should think about the costs.","Why don't we ask our clients?","Carla is right about the budget.","I'm not sure about that.","An online shop is too expensive."],"complete":[{"s":"___ my opinion, it's a good idea.","a":"In","d":["On","At"]},{"s":"I agree ___ Carla about the budget.","a":"with","d":["to","for"]},{"s":"I see your ___, but it's too risky.","a":"point","d":["idea","opinion"]},{"s":"Why don't we ___ our clients first?","a":"ask","d":["asking","to ask"],"hint":"base form"},{"s":"We ___ check the budget before we decide.","a":"should","d":["should to","shoulds"]}],"ask":[{"q":"What do you think about working from home on Fridays? Give your opinion and one reason.","keys":[["opinion","think","believe"],["because","so"],["home"],["friday","fridays"],["good","bad","idea","better","quiet"]],"min":15,"model":"In my opinion, working from home on Fridays is a good idea, because it's quiet at home and I can finish my reports."},{"q":"Your colleague says: 'Meetings should be two hours long.' Disagree politely and make a suggestion.","keys":[["see","point"],["but","however"],["long","too","hours"],["why","should"],["minutes","shorter","short"]],"min":15,"model":"I see your point, but two hours is too long, and people get tired. Why don't we have shorter meetings of thirty minutes?"}],"pic":{"query":"business team meeting","prompt":"Describe the picture: who is in the meeting, where they are, what they are doing and what they might be discussing.","keys":[["meeting","colleagues","team"],["cafe","café","coffee","table"],["woman","man","people"],["laughing","smiling","talking","listening"],["idea","opinion","think","point"],["standing","sitting"]],"min":25,"model":"In this picture, three colleagues are having an informal meeting in a café. A woman is standing with a cup of coffee and she is laughing. A man and a woman are sitting at a table and listening to her. I think they are discussing a new idea, and the man is saying, 'I see your point, but…'","img":"img/a2b1/pic_L3.jpg","credit":"Photo: “Business team meeting at a cafe” by Rawpixel Ltd · CC BY 2.0 · via Openverse"}}]},{"n":2,"level":"A2–B1","title":"Experiences & Careers","goals":["Talk about your career using the present perfect and the past simple","Use for and since to talk about duration","Tell stories about problems at work with the past continuous"],"sessions_data":[{"n":4,"code":"L4","title":"Career Stories","pron":["I've worked in customer service for three years.","I started at a small travel agency in 2022.","Have you ever worked with international clients?","My biggest achievement was a new system for returns.","Since then, complaints have dropped by half."],"order":["Why did you leave your last job?","She has never been to London.","Have you ever interviewed a candidate?","Marco was promoted to Sales Coordinator.","What did you study at university?"],"complete":[{"s":"I've worked here ___ 2022.","a":"since","d":["for","ago"],"hint":"a starting point"},{"s":"She has been in sales ___ six months.","a":"for","d":["since","during"],"hint":"a period of time"},{"s":"I ___ my first job in 2019.","a":"started","d":["have started","start"],"hint":"finished time"},{"s":"Have you ever ___ a presentation in English?","a":"given","d":["gave","give"],"hint":"past participle"},{"s":"Marco ___ promoted last month.","a":"was","d":["has","is"],"hint":"past simple"}],"ask":[{"q":"How long have you worked in your current job, and what did you do before?","keys":[["worked","work","working"],["for","since"],["years","year","months","month"],["before"],["started","start","was","studied"]],"min":15,"model":"I have worked as an accountant for four years. Before that, I worked in a bank. I started there in 2018."},{"q":"What is your biggest professional achievement?","keys":[["achievement","achievements"],["biggest","best","most"],["was","did","made","created"],["since","then","result"],["project","system","clients","client","team","sales"]],"min":15,"model":"My biggest achievement was a new project for our clients. Since then, our sales have increased by twenty percent."}],"pic":{"query":"job interview office","prompt":"Describe the picture: who are the people, where are they and what are they doing? Imagine one person is a candidate. What experience has this person had?","keys":[["interview","interviewer","interviewers"],["candidate","applicant"],["table","office","desk"],["papers","documents","cv","folder"],["experience","worked","job","years"],["people","women","woman","man"]],"min":25,"model":"In this picture, three people are sitting at a table in an office. I think it is a job interview. The two people on the left are the interviewers, and the woman on the right is the candidate. They are looking at her CV. She has worked in this industry for many years.","img":"img/a2b1/pic_L4.jpg","credit":"Photo: “Interview” by Alan Cleaver · CC BY 2.0 · via Openverse"}},{"n":5,"code":"L5","title":"Problems at Work","pron":["I was preparing a quote when the computers went black.","While he was checking the system, we were waiting in the kitchen.","Luckily, the backup system was working.","I'm very sorry for the delay, Mr. Tanaka.","In the end, we solved the problem in less than an hour."],"order":["Why were you waiting in the kitchen?","The technician replaced the old cable.","She was finishing the monthly report.","Was Diego talking to a client?","Marco called the client to explain the delay."],"complete":[{"s":"I ___ working when the system crashed.","a":"was","d":["were","did"],"hint":"was / were"},{"s":"They ___ waiting in the kitchen.","a":"were","d":["was","did"],"hint":"was / were"},{"s":"While she was making coffee, she ___ a strange noise.","a":"heard","d":["hearing","hears"],"hint":"past simple"},{"s":"The call stopped ___ the middle of a sentence.","a":"in","d":["on","at"],"hint":"preposition"},{"s":"We didn't lose the report because, ___, the backup was working.","a":"luckily","d":["unfortunately","suddenly"],"hint":"good news"}],"ask":[{"q":"What were you doing yesterday at 10 a.m.?","keys":[["was","were"],["working","writing","talking","preparing","having","reading","driving","studying"],["office","home","meeting","computer","desk","car"],["yesterday","ten","10","morning"]],"min":12,"model":"Yesterday at 10 a.m., I was working at my desk. I was writing an email when my boss called me."},{"q":"Tell me about a problem you had at work. What happened and how did you solve it?","keys":[["was","were"],["when","while"],["suddenly","unfortunately"],["luckily","fortunately"],["solved","fixed","solve","fix"],["end","learned","learnt"]],"min":25,"model":"Last year I was preparing a presentation when my computer crashed. Unfortunately, I lost my slides. Luckily, I had a backup in my email. In the end, I solved the problem and I learned to save my work."}],"pic":{"query":"computer problem office","prompt":"Describe the picture: who is in it, where are they and what are they doing? Imagine what problem they had and what happened next.","keys":[["man","businessman"],["office","desk"],["laptop","computer"],["worried","stressed","tired","upset","nervous"],["was","were","when","while"],["problem","stopped","crashed","lost","broken"]],"min":25,"model":"In this picture, a young man is sitting at his desk in an office. He looks very worried and he has his hands on his head. I think he was working on an important report when, suddenly, his laptop stopped working. He lost all his work.","img":"img/a2b1/pic_L5.jpg","credit":"Photo: “Business Man” by Direct Media · CC0 · via Openverse"}},{"n":6,"code":"L6","title":"How Things Work","pron":["Every day, more than two thousand packages are sent from our warehouse.","First, the orders are received online.","The products are packed by hand and labelled with a barcode.","The packages are collected by our trucks twice a day.","If a mistake is detected, the client is contacted immediately."],"order":["Where are the boxes labelled?","Every package is scanned three times.","The labels are printed by a machine.","How are the packages transported?","Coffee is grown in many countries."],"complete":[{"s":"The products ___ packed by hand.","a":"are","d":["is","be"],"hint":"is / are"},{"s":"Every package is ___ three times.","a":"scanned","d":["scan","scanning"],"hint":"past participle"},{"s":"The labels are printed ___ a machine.","a":"by","d":["from","of"],"hint":"who or what does it"},{"s":"___, the orders are received. Then, they are checked.","a":"First","d":["Finally","Lastly"],"hint":"sequencer"},{"s":"Coffee beans are ___ by ship.","a":"transported","d":["transport","transporting"],"hint":"past participle"}],"ask":[{"q":"What does your company do or make? Explain it in three steps.","keys":[["first","firstly"],["then","next","after"],["finally","last"],["is","are"],["made","sent","checked","delivered","received","produced","sold","prepared"]],"min":20,"model":"My company makes furniture. First, the wood is cut in our factory. Then, the pieces are painted and checked. Finally, the furniture is delivered to the shops."},{"q":"How is coffee made in your office?","keys":[["coffee"],["water"],["is","are"],["first","then","finally","after"],["added","put","made","heated","boiled","poured"]],"min":15,"model":"First, the water is heated in the machine. Then, the coffee is put in the cup. After that, the hot water is added. Finally, milk or sugar is added."}],"pic":{"query":"warehouse packages workers","prompt":"Describe the picture: where is it, who can you see and what are they doing? Then explain what happens to the products there, using the passive.","keys":[["warehouse","loading","dock"],["worker","man"],["truck","lorry"],["boxes","pallets","packages","products"],["loaded","wrapped","sent","packed","delivered"],["is","are"]],"min":25,"model":"This picture shows the loading area of a warehouse. A worker in an orange vest is opening the door of a truck. Next to him, there are some pallets with boxes. I think the boxes are wrapped in plastic, then they are loaded onto the truck and they are sent to the clients.","img":"img/a2b1/pic_L6.jpg","credit":"Photo: “20200326-FNS-LSC-0576” by USDAgov · Public Domain · via Openverse"}}]},{"n":3,"level":"B1","title":"Plans & Decisions","goals":["Talk about arrangements, plans and quick decisions","Use the first and second conditional to discuss options","Explain rules and obligations with must and have to"],"sessions_data":[{"n":7,"code":"L7","title":"Business Trips & Arrangements","pron":["I'm flying to Lima on Tuesday afternoon.","Our meeting is still confirmed for tomorrow at ten.","Don't worry, I'll book a new flight now.","We're going to visit two potential clients on Thursday.","My flight is delayed, so I'll be at the hotel at nine."],"order":["Ana is booking a new flight for Marco.","Are you going to visit the trade fair?","I'll send you the boarding pass.","What time is your flight leaving?","The meeting is still confirmed for tomorrow."],"complete":[{"s":"I'm ___ to Lima on Tuesday.","a":"flying","d":["fly","flew"],"hint":"arrangement"},{"s":"We're going ___ visit two clients.","a":"to","d":["for","at"],"hint":"plan"},{"s":"The flight is full? OK, I ___ book another one.","a":"will","d":["am","was"],"hint":"decision now"},{"s":"Our flight is ___ by two hours.","a":"delayed","d":["delay","delaying"],"hint":"late"},{"s":"Please ___ in online before your flight.","a":"check","d":["take","make"],"hint":"register for a flight"}],"ask":[{"q":"What are your arrangements for next week? Tell me about three days.","keys":[["monday","tuesday","wednesday","thursday","friday","next week"],["meeting","meet","visiting","seeing","having"],["i'm","we're","am","are"],["morning","afternoon","evening","lunch"],["client","clients","team","manager","colleague","colleagues"]],"min":20,"model":"On Monday I'm meeting my team in the morning. On Wednesday I'm visiting a new client in the afternoon, and on Friday I'm having lunch with my manager."},{"q":"Your flight to an important meeting is cancelled. What will you do? Make three quick decisions.","keys":[["i'll","will"],["call","phone","send","message"],["book","take","find"],["flight","train","bus","taxi"],["client","meeting","hotel","manager"]],"min":15,"model":"OK, I'll call the client and explain the problem. Then I'll book the next flight, and I'll ask the hotel to keep my room."}],"pic":{"query":"airport business traveller","prompt":"Describe the picture: who is in the picture, where they are, what they are doing and where you think they are travelling to.","keys":[["airport","terminal","corridor"],["traveller","traveler","woman","person","passenger"],["walking","pulling","going"],["suitcase","bag","luggage"],["flight","flying","plane","trip"],["colourful","colorful","lights","walkway"]],"min":25,"model":"In this picture, a traveller is walking through a long, colourful corridor at an airport. She is pulling a suitcase and there is a moving walkway next to her. I think she is flying to a business meeting. Her flight is leaving in an hour.","img":"img/a2b1/pic_L7.jpg","credit":"Photo: “Airport Traveller” by Nick Harris1 · CC BY-ND 2.0 · via Openverse"}},{"n":8,"code":"L8","title":"Making Decisions","pron":["If we accept the lower price, we'll sell more units.","What will happen if we don't accept their offer?","If I were you, I'd ask for a smaller discount.","If we offered free shipping, would they accept?","Let's think about the consequences of each option."],"order":["Our profit will be very small.","Delivery time is their biggest problem.","Would you accept a lower price?","Carla is worried about the numbers.","Let's analyse all the options together."],"complete":[{"s":"If we accept, we ___ sell more units.","a":"will","d":["would","are"],"hint":"first conditional"},{"s":"If I ___ you, I'd wait.","a":"were","d":["am","be"],"hint":"advice"},{"s":"If we offered free shipping, they ___ accept.","a":"would","d":["will","are"],"hint":"second conditional"},{"s":"What will happen if we ___ accept?","a":"don't","d":["won't","didn't"],"hint":"first conditional"},{"s":"They want a fifteen percent ___.","a":"discount","d":["profit","competitor"],"hint":"a lower price"}],"ask":[{"q":"If your company opened an office abroad, where would it be and what would you do there?","keys":[["would","i'd","we'd","it'd"],["office","branch"],["work","manage","travel","live","help"],["because","so"],["clients","team","market","customers"]],"min":20,"model":"If my company opened an office abroad, it would be in Lima because we have a lot of clients in Peru. I would like to work there for one year and help the new team."},{"q":"A client asks for a 20% discount. What will happen if you accept? What will happen if you say no?","keys":[["if"],["accept","agree","yes"],["will","we'll","they'll","it'll"],["profit","money"],["client","customer","competitor"],["say no","lose","leave","reject"]],"min":20,"model":"If we accept, we'll keep the client, but our profit will be very small. If we say no, the client will probably go to our competitor, so I think we should offer ten percent."}],"pic":{"query":"business team meeting","prompt":"Describe the picture: who the people are, where they are, what they are discussing and what decision you think they will make.","keys":[["meeting","group","colleagues","team"],["table","room"],["papers","documents","water","bottles"],["thinking","discussing","talking","listening"],["decision","decide","choose","option"],["if","will","would"]],"min":25,"model":"In this picture, a group of colleagues is having a meeting around a table. There are papers, glasses and bottles of water on the table. One man is thinking carefully. I think they are making a difficult decision. If they choose the right option, the company will save money.","img":"img/a2b1/pic_L8.jpg","credit":"Photo: “Another discussion” by @boetter · CC BY 2.0 · via Openverse"}},{"n":9,"code":"L9","title":"Rules, Advice & Obligations","pron":["You must wear your ID card at all times.","You mustn't share your password with anyone.","You don't have to come to the office on Fridays.","Do I have to arrive at nine every day?","You should ask questions when you don't understand something."],"order":["You have to clean your own cup.","Carla is very strict about that.","Should I learn the client system?","Nobody expects you to know everything.","Ana will help you with the system."],"complete":[{"s":"You ___ wear your ID card at all times.","a":"must","d":["mustn't","don't"],"hint":"obligation"},{"s":"You ___ share your password.","a":"mustn't","d":["must","don't need"],"hint":"prohibited"},{"s":"You don't have ___ come on Fridays.","a":"to","d":["for","at"],"hint":"not necessary"},{"s":"You ___ ask questions when you don't understand.","a":"should","d":["shouldn't","mustn't"],"hint":"advice"},{"s":"___ I have to arrive at nine?","a":"Do","d":["Am","Does"],"hint":"question"}],"ask":[{"q":"What are three important rules in your workplace?","keys":[["have to","must","has to","need to"],["mustn't","can't","not allowed","prohibited"],["wear","arrive","use","share","clean"],["office","company","workplace","work"],["rule","rules","policy"]],"min":20,"model":"In my company, we have to arrive at nine and we must wear our ID cards. We mustn't use our phones in meetings, and we have to clean the kitchen after lunch. These are important rules."},{"q":"A new colleague starts in your team tomorrow. What advice would you give them?","keys":[["should"],["shouldn't","don't worry"],["ask","questions","question"],["worry","nervous","relax","mistakes"],["help","team","colleagues","lunch"]],"min":20,"model":"You should ask a lot of questions in your first week. You don't have to know everything at the beginning. You shouldn't worry about mistakes, and you should have lunch with the team."}],"pic":{"query":"office first day","prompt":"Describe the picture: who the people are, where they are, what they are doing and what rules or advice they are talking about.","keys":[["woman","trainer","speaker"],["training","session","course","induction"],["standing","explaining","talking","speaking"],["people","group","listening","employees"],["rules","must","have to","should","advice"],["room","office"]],"min":25,"model":"In this picture, a woman is giving a training session to a small group. She is standing at the front of the room and she is explaining something with her hands. The people are sitting and listening. I think she is telling them the company rules: 'You must wear your ID card and you should ask for help.'","img":"img/a2b1/pic_L9.jpg","credit":"Photo: “Media Training for Lawyers” by gauge opinion · CC BY 2.0 · via Openverse"}}]},{"n":4,"level":"B1","title":"Presenting & Persuading","goals":["Describe results and trends with numbers","Report what other people said","Use relative clauses to give extra information"],"sessions_data":[{"n":10,"code":"L10","title":"Presenting Results","pron":["As you can see, sales increased steadily from January to June.","In July, there was a sharp drop because of the strike.","Sales recovered quickly and reached a peak in November.","The north grew faster than the south this year.","We should invest more in the Peruvian market next year."],"order":["Let's move on to the next slide.","The chart shows our sales by month.","There was a sharp rise in orders.","Prices remained stable at ten dollars.","This was because of the transport strike."],"complete":[{"s":"Sales increased ___ all year.","a":"steadily","d":["steady","steadiness"],"hint":"adverb"},{"s":"Costs rose ___ 5% last month.","a":"by","d":["of","in"],"hint":"the size of the change"},{"s":"After the strike, sales ___ quickly.","a":"recovered","d":["reached","remained"]},{"s":"As you can ___, sales rose sharply.","a":"see","d":["look","watch"]},{"s":"There was a ___ increase in prices.","a":"slight","d":["slightly","slightness"],"hint":"adjective"}],"ask":[{"q":"Which numbers are important in your job, and how have they changed this year?","keys":[["sales","clients","orders","costs","customers","numbers"],["increased","rose","grew","increase","rise","risen"],["slightly","sharply","steadily"],["because","reason"],["year","month","quarter"]],"min":20,"model":"In my job, the most important numbers are sales and new clients. This year, our sales increased steadily because we opened a new shop, but our costs also rose slightly."},{"q":"Describe one change at your company and give a recommendation.","keys":[["increased","rose","grew","fell","decreased","dropped"],["sharply","slightly","steadily"],["because","reason"],["should","recommend"],["next","future"]],"min":20,"model":"Last year, the number of complaints fell sharply because we hired two new people in customer service. I think we should hire one more person next year."}],"pic":{"query":"business presentation chart","prompt":"Describe the picture: who is presenting, where they are, what is on the screen and what you think the speaker is saying.","keys":[["presentation","presenting","presenter"],["man","speaker"],["screen","slide","chart","projector"],["audience","people","listening"],["results","sales","rose","increased","figures"],["suit","standing"]],"min":25,"model":"In this picture, a man in a suit is giving a presentation. He is standing next to a big screen with a slide. Some people are sitting and listening. I think he is presenting the results of the year and explaining that sales rose sharply.","img":"img/a2b1/pic_L10.jpg","credit":"Photo: “Sessió Smartphone - Forotec 2011” by Fundació Bit · CC BY 2.0 · via Openverse"}},{"n":11,"code":"L11","title":"Reporting Information","pron":["Mr. Quispe said that they were very happy with our service.","He told me that they wanted to double the order.","She said she would send the official request by Friday.","Here is a short summary of the meeting and the next steps.","Please let me know if I have missed anything."],"order":["She said that she was very busy.","He told us the price was too high.","They said they would call us back.","Did they mention the new contract?","The next step is to prepare an offer."],"complete":[{"s":"He ___ me that the client was happy.","a":"told","d":["said","spoke"],"hint":"with a person"},{"s":"She ___ that she would be late.","a":"said","d":["told","talked"],"hint":"no person"},{"s":"'I am busy.' → Ana said she ___ busy.","a":"was","d":["is","be"],"hint":"back-shift"},{"s":"'We will call.' → They said they ___ call.","a":"would","d":["will","are"],"hint":"will → ?"},{"s":"I sent a short ___ after the meeting.","a":"summary","d":["deadline","request"]}],"ask":[{"q":"What did your manager or a colleague tell you this week? Report two things.","keys":[["said","say"],["told","tell"],["manager","boss","colleague","coworker","client"],["was","were","would","had","could"],["week","monday","yesterday","today"]],"min":20,"model":"This week my manager told me that our team had a new client in Peru. A colleague said that she would be on holiday next week, so I'm going to help with her tasks."},{"q":"Think of your last meeting. What did people say, and what are the next steps?","keys":[["meeting","call"],["said","told"],["was","were","would","wanted","needed","had"],["next","step","steps"],["decided","agreed","decision"]],"min":20,"model":"In my last meeting, my manager said that the project was late. The client told us that they needed the report by Friday. We decided to work on it together, and the next step is to send a draft on Wednesday."}],"pic":{"query":"colleagues taking notes","prompt":"Describe the picture: who you can see, where they are, what they are doing and what someone might report after the event.","keys":[["panel","discussion","conference","event"],["women","speakers","people"],["stage","sitting"],["audience","listening","tables"],["said","told","report","reported"],["speaking","talking","asking"]],"min":25,"model":"In this picture, there is a panel discussion. Six women are sitting on a stage and one of them is speaking. Many people are sitting at tables and listening. After the event, a journalist will report what they said: 'She said that the company had grown.'","img":"img/a2b1/pic_L11.jpg","credit":"Photo: “Panel discussion” by RandstadCanada · CC BY 2.0 · via Openverse"}},{"n":12,"code":"L12","title":"Final Presentation","pron":["Today I want to present a project which can change our company.","The clients who signed last year want to grow with us.","If we invest now, we will be the leaders in the region.","We are asking for your support to open the office in March.","Thank you for listening. Are there any questions?"],"order":["She is the colleague who helped me.","This is a product which sells well.","We recommend opening a new office.","If we wait, competitors will arrive first.","Are there any questions from the audience?"],"complete":[{"s":"The investors ___ came were impressed.","a":"who","d":["which","where"],"hint":"people"},{"s":"This is the slide ___ shows our results.","a":"which","d":["who","where"],"hint":"things"},{"s":"We are asking ___ your support.","a":"for","d":["to","about"]},{"s":"The investors ___ the project last week.","a":"approved","d":["approve","approving"],"hint":"past simple"},{"s":"The ___ clapped at the end of the presentation.","a":"audience","d":["investment","deadline"]}],"ask":[{"q":"What is the most useful thing you have learned in this workshop, and where will you use it?","keys":[["learned","learnt","learn"],["useful","important","helpful"],["emails","presentations","meetings","calls","reports"],["will","going"],["work","job","office","company"]],"min":20,"model":"The most useful thing I have learned is how to present results with clear language. I will use it at work in our monthly meetings, where I show the sales figures to my manager."},{"q":"Give the hook and the request of your final presentation.","keys":[["today","present","project","idea"],["which","who","that"],["if","will"],["asking","recommend","request","support"],["ago","imagine","story"]],"min":25,"model":"A year ago, our team spent ten hours a week on paper reports. Today I want to present a project which can save that time. If we start now, we will finish the change by June. We are asking for your support."}],"pic":{"query":"audience applauding presentation","prompt":"Describe the picture: who is presenting, who is listening, where they are and how the people feel.","keys":[["conference","hall","room","event"],["audience","people","crowd"],["speaker","presentation","presenting"],["screen","stage","slide"],["who","which","that"],["watching","listening","sitting"]],"min":25,"model":"In this picture, there is a big conference room which is full of people. A speaker is giving a presentation on the stage, and there is a big screen behind him. The people who are sitting in the audience are watching carefully. I think it is an important presentation for investors.","img":"img/a2b1/pic_L12.jpg","credit":"Photo: “Monday Sessions, David Cage of Quantic Dream” by Official GDC · CC BY 2.0 · via Openverse"}}]}];
+const UNIT_IMGS_A2B1 = {"1":"img/a2b1/unit1.jpg","2":"img/a2b1/unit2.jpg","3":"img/a2b1/unit3.jpg","4":"img/a2b1/unit4.jpg"};
+const LEVEL = (()=>{ const q=new URLSearchParams(location.search).get("level"); if(q==="a1a2"||q==="a2b1"){ try{ localStorage.setItem("tws_level",q); }catch(e){} return q; }
+  try{ return localStorage.getItem("tws_level")==="a2b1"?"a2b1":"a1a2"; }catch(e){ return "a1a2"; } })();
+const LV2 = LEVEL==="a2b1";
+const UNITS = LV2 ? UNITS_A2B1 : UNITS_A1A2;
+const UIMG = LV2 ? UNIT_IMGS_A2B1 : UNIT_IMGS;
+const LVNAME = LV2 ? "A2–B1" : "A1–A2";
+const tx = (en, es) => LV2 ? en : es;
+if(LV2){ document.body.classList.add("lv2"); document.title="TRONWELL · Intensive English Workshop · Speaking Practice A2–B1"; }
 const CONTR={"i'm":"i am","you're":"you are","we're":"we are","they're":"they are","he's":"he is","she's":"she is","it's":"it is",
   "that's":"that is","there's":"there is","here's":"here is","what's":"what is","where's":"where is","who's":"who is","how's":"how is","let's":"let us",
   "isn't":"is not","aren't":"are not","wasn't":"was not","weren't":"were not","don't":"do not","doesn't":"does not","didn't":"did not",
@@ -444,7 +477,15 @@ function colorHtml(tg,A){
     return `<span class="w-${st}${w.blank?" w-blank":""}">${esc(w.raw)}</span>`;
   }).join("");
 }
+function evaluateFree(it,heard){
+  const H=toks(heard), n=H.length, groups=it.keys;
+  const hit=groups.map(g=>g.some(v=>{ const t=toks(v); if(t.length>1) return countSeq(H,t)>0; return H.some(w=>wsim(w,t[0])>=0.85||(t[0].length>4&&w.startsWith(t[0].slice(0,-1)))); }));
+  const got=hit.filter(Boolean).length, need=Math.max(2,Math.ceil(groups.length*0.6));
+  const score=Math.round(100*(0.75*Math.min(1,got/need)+0.25*Math.min(1,n/it.min)));
+  return {heard,score,pass:got>=need&&n>=it.min,hit,got,need,n};
+}
 function evaluate(it,heard){
+  if(it.type==="q"||it.type==="d") return evaluateFree(it,heard);
   const H=toks(heard);
   if(it.type!=="c"){
     const tg=buildTarget([{text:it.text}]), A=align(tg.T,H);
@@ -483,7 +524,7 @@ function evaluate(it,heard){
 }
 
 /* ===================================================== ENGINE */
-const LS_BEST="tws_a1a2_best";
+const LS_BEST=LV2?"tws_a2b1_best":"tws_a1a2_best";
 let BEST={}, cur=null, curSess=null;
 try{ const s=localStorage.getItem(LS_BEST); if(s) BEST=JSON.parse(s)||{}; }catch(e){}
 function saveBest(){ try{localStorage.setItem(LS_BEST,JSON.stringify(BEST));}catch(e){} }
@@ -500,6 +541,8 @@ UNITS.forEach(U=>{ UNIT_IDS[U.n]=[]; U.sessions_data.forEach(S=>{
   const ids=[];
   S.pron.forEach((t,i)=>{ const id=`${S.n}_p_${i}`; ITEMS[id]={id,type:"p",sess:S.n,i,text:t}; ids.push(id); });
   S.order.forEach((t,i)=>{ const id=`${S.n}_o_${i}`; ITEMS[id]={id,type:"o",sess:S.n,i,text:t,words:shuffleWords(t)}; ids.push(id); });
+  (S.ask||[]).forEach((a,i)=>{ const id=`${S.n}_q_${i}`; ITEMS[id]={id,type:"q",sess:S.n,i,q:a.q,keys:a.keys,min:a.min,model:a.model,text:a.model}; ids.push(id); });
+  if(S.pic){ const id=`${S.n}_d_0`; ITEMS[id]={id,type:"d",sess:S.n,i:0,prompt:S.pic.prompt,img:S.pic.img,credit:S.pic.credit,keys:S.pic.keys,min:S.pic.min,model:S.pic.model,text:S.pic.model}; ids.push(id); }
   S.complete.forEach((c,i)=>{ const id=`${S.n}_c_${i}`; ITEMS[id]={id,type:"c",sess:S.n,i,s:c.s,a:c.a,d:c.d,hint:c.hint,text:c.s.replace("___",c.a),opts:shuffle([c.a].concat(c.d))}; ids.push(id); });
   SESS_IDS[S.n]=ids; UNIT_IDS[U.n]=UNIT_IDS[U.n].concat(ids);
 }); });
@@ -531,24 +574,25 @@ function renderHome(){
     <div class="sys"><button class="sbtn" onclick="testMic()">🎙️ Test my microphone</button><span class="es">Prueba tu micrófono antes de empezar.</span></div>
     <div id="micTest"></div>
     <div class="model-line" id="modelLine"></div>`;
-  let html=`<div class="home-hero"><h1>Speaking Practice 🎙️</h1>
-    <p>4 units · 12 sessions · ${TOTAL} phrases · A1–A2 · Pronunciation · Word order · Complete &amp; say</p>
+  let html=`<div class="lvsw"><a href="?level=a1a2" class="${LV2?"":"on"}"><b>A1–A2</b><span>English Workshop · part 1</span></a><a href="?level=a2b1" class="${LV2?"on":""}"><b>A2–B1</b><span>Intensive English Workshop · part 2</span></a></div>
+    <div class="home-hero"><h1>Speaking Practice ${LVNAME} 🎙️</h1>
+    <p>${UNITS.length} units · ${UNITS.reduce((a,u)=>a+u.sessions_data.length,0)} ${LV2?"lessons":"sessions"} · ${TOTAL} ${LV2?"items":"phrases"} · Pronunciation · Word order · Complete &amp; say${LV2?" · Answer questions · Describe pictures":""}</p>
     <div class="home-pbar"><div class="home-pfill" style="width:${m/TOTAL*100}%"></div></div>
-    <p style="font-size:12px;margin-top:5px;color:var(--gris)">${m} of ${TOTAL} phrases mastered (score ${PASS}+)</p></div>
-    <div class="home-stats"><div class="stat"><b>${practised} / ${TOTAL}</b><span>phrases practised</span></div>
-    <div class="stat"><b>${m}</b><span>phrases mastered</span></div>
+    <p style="font-size:12px;margin-top:5px;color:var(--gris)">${m} of ${TOTAL} ${LV2?"items":"phrases"} mastered (score ${PASS}+)</p></div>
+    <div class="home-stats"><div class="stat"><b>${practised} / ${TOTAL}</b><span>${LV2?"items":"phrases"} practised</span></div>
+    <div class="stat"><b>${m}</b><span>${LV2?"items":"phrases"} mastered</span></div>
     <div class="stat"><b>${avgOf(ALL_IDS)}</b><span>average score</span></div></div>
     <div class="home-how">${block("🎙️","How it works","3 steps",how)}</div>`;
-  ["A1","A2"].forEach(lv=>{
+  [...new Set(UNITS.map(u=>u.level))].forEach(lv=>{
     html+=`<div class="unit-label">Level ${lv}</div><div class="mosaic">`;
     UNITS.filter(u=>u.level===lv).forEach(u=>{
       const ids=UNIT_IDS[u.n], um=mastered(ids);
       html+=`<div class="tile ${um===ids.length?"done":""}" onclick="openUnit(${u.n})">
-        <img src="${UNIT_IMGS[u.n]}" alt="${esc(u.title)}" loading="lazy" onerror="this.style.display='none'">
+        <img src="${UIMG[u.n]}" alt="${esc(u.title)}" loading="lazy" onerror="this.style.display='none'">
         <div class="cnum">Unit ${u.n}</div><div class="check">✓</div>
-        <div class="ov"><div class="lvl">LEVEL ${u.level} · ${u.sessions_data.length} SESSIONS · ${ids.length} PHRASES</div>
+        <div class="ov"><div class="lvl">LEVEL ${u.level} · ${u.sessions_data.length} ${LV2?"LESSONS":"SESSIONS"} · ${ids.length} ${LV2?"ITEMS":"PHRASES"}</div>
         <div class="nm">${u.title}</div>
-        <div class="ns">${um} / ${ids.length} phrases mastered</div></div></div>`;
+        <div class="ns">${um} / ${ids.length} ${LV2?"items":"phrases"} mastered</div></div></div>`;
     });
     html+="</div>";
   });
@@ -561,7 +605,7 @@ function renderUnit(){
   U.sessions_data.forEach(s=>{
     tabs+=`<div class="sess-tab ${s.n===curSess?"active":""}" onclick="openSess(${s.n})">
       <div class="pt-t">${s.code} · ${s.title}</div>
-      <div class="pt-s">${SESS_IDS[s.n].length} phrases</div><div class="pt-b" id="tabb_${s.n}">${tabLabel(s.n)}</div></div>`;
+      <div class="pt-s">${SESS_IDS[s.n].length} ${LV2?"items":"phrases"}</div><div class="pt-b" id="tabb_${s.n}">${tabLabel(s.n)}</div></div>`;
   });
   tabs+="</div>";
   const list=type=>SESS_IDS[S.n].filter(id=>ITEMS[id].type===type).map(id=>`<div class="q-item" id="it_${id}">${itemHtml(id)}</div>`).join("");
@@ -575,10 +619,12 @@ function renderUnit(){
     <div class="lesson-body">
       ${tabs}
       <div class="model-banner" id="modelBanner"></div>
-      <div class="ex-toc"><span><b>5</b> Pronunciation</span><span><b>5</b> Word order</span><span><b>5</b> Complete &amp; say</span></div>
-      ${block("🎧","Pronunciation · Read aloud","5 phrases",`<div class="ex-sub">Listen, then press <b>Record</b> and read the sentence aloud.<br><i>Escucha el modelo, presiona Record y lee la frase en voz alta.</i></div>${list("p")}`)}
-      ${block("🧩","Word Order · Say it","5 phrases",`<div class="ex-sub">Put the words in order in your head and <b>say the complete sentence</b>.<br><i>Ordena las palabras mentalmente y di la frase completa.</i></div>${list("o")}`)}
-      ${block("✏️","Complete &amp; Say","5 phrases",`<div class="ex-sub">Choose the correct word and <b>say the complete sentence</b>.<br><i>Elige la palabra correcta y di la frase completa.</i></div>${list("c")}`)}
+      <div class="ex-toc"><span><b>5</b> Pronunciation</span><span><b>5</b> Word order</span><span><b>5</b> Complete &amp; say</span>${S.ask?`<span><b>${S.ask.length}</b> Answer the question</span>`:""}${S.pic?"<span><b>1</b> Describe the picture</span>":""}</div>
+      ${block("🎧","Pronunciation · Read aloud","5 phrases",`<div class="ex-sub">Listen, then press <b>Record</b> and read the sentence aloud.<span class="es"><br><i>Escucha el modelo, presiona Record y lee la frase en voz alta.</i></span></div>${list("p")}`)}
+      ${block("🧩","Word Order · Say it","5 phrases",`<div class="ex-sub">Put the words in order in your head and <b>say the complete sentence</b>.<span class="es"><br><i>Ordena las palabras mentalmente y di la frase completa.</i></span></div>${list("o")}`)}
+      ${block("✏️","Complete &amp; Say","5 phrases",`<div class="ex-sub">Choose the correct word and <b>say the complete sentence</b>.<span class="es"><br><i>Elige la palabra correcta y di la frase completa.</i></span></div>${list("c")}`)}
+      ${S.ask?block("💬","Answer the Question",S.ask.length+" questions",`<div class="ex-sub">Listen to the question, then press <b>Record</b> and answer in 2–4 sentences. Use the topic words — they decide your score.</div>${list("q")}`):""}
+      ${S.pic?block("🖼️","Describe the Picture","1 picture",`<div class="ex-sub">Look at the picture, press <b>Record</b> and describe it: who, where, what they are doing, and what you think.</div>${list("d")}`):""}
       <div class="score-panel" id="sessScore"></div>
       <div class="lesson-nav">${prevB}${nextB}</div>
     </div>`;
@@ -590,8 +636,8 @@ function paintSession(){
   const ids=SESS_IDS[S.n], m=mastered(ids), pr=ids.filter(id=>BEST[id]!=null).length;
   const el=document.getElementById("sessScore");
   if(el){
-    const msg=m===ids.length?"🎉 Session complete! Excellent work!":m>=10?"👍 Great progress — keep practising.":pr?"💪 Keep going — you can do it!":"Start with phrase 1 🙂 · Empieza por la frase 1";
-    el.innerHTML=`<div class="sp-n">${m} / ${ids.length}</div><div class="sp-l">phrases mastered in ${S.code} (score ${PASS}+)${pr?` · average score ${avgOf(ids)}`:""}</div><div class="sp-msg">${msg}</div>`;
+    const msg=m===ids.length?(LV2?"🎉 Lesson complete! Excellent work!":"🎉 Session complete! Excellent work!"):m>=10?"👍 Great progress — keep practising.":pr?"💪 Keep going — you can do it!":tx("Start with item 1 🙂","Start with phrase 1 🙂 · Empieza por la frase 1");
+    el.innerHTML=`<div class="sp-n">${m} / ${ids.length}</div><div class="sp-l">${LV2?"items":"phrases"} mastered in ${S.code} (score ${PASS}+)${pr?` · average score ${avgOf(ids)}`:""}</div><div class="sp-msg">${msg}</div>`;
   }
   const tb=document.getElementById("tabb_"+S.n); if(tb) tb.textContent=tabLabel(S.n);
   paintProgress();
@@ -604,7 +650,12 @@ function itemHtml(id){
   const it=ITEMS[id], st=ST[id]||{}, R=st.res, reveal=isRevealed(it,st), best=BEST[id];
   const recNow=rec&&rec.id===id, working=st.state==="proc"||st.state==="wait";
   let body="";
-  if(it.type==="p"){
+  if(it.type==="q"||it.type==="d"){
+    body=it.type==="q"?`<div class="free-q">${esc(it.q)}</div>`:`<div class="pic-box">${it.img?`<img src="${it.img}" alt="Picture to describe">`:""}<div class="pt"><div class="free-q">${esc(it.prompt)}</div>${it.credit?`<small>${esc(it.credit)}</small>`:""}</div></div>`;
+    body+=`<div class="sp-hint">Speak for at least ${it.min} words.</div>`;
+    if(st.hint||reveal) body+=`<div class="kw">${it.keys.map((g,k)=>`<span class="${R&&R.hit&&R.hit[k]?"hit":""}">${esc(g[0])}</span>`).join("")}</div>`;
+    if(reveal) body+=`<div class="model-ans"><b>Model answer:</b> ${esc(it.model)}</div>`;
+  } else if(it.type==="p"){
     body=`<div class="sp-text">${R?R.html:esc(it.text)}</div>`;
   } else if(it.type==="o"){
     body=`<div class="word-pool">${it.words.map(w=>`<span class="chip">${esc(w)}</span>`).join("")}</div>`;
@@ -620,9 +671,10 @@ function itemHtml(id){
   const bestTag=best!=null?`<span class="best ${best>=PASS?"ok":""}">${best>=PASS?"✓ ":""}Best ${best}</span>`:"";
   let acts="";
   if(it.type==="p") acts+=`<button class="sbtn" onclick="speak('${id}',0.9)">🔊 Listen</button><button class="sbtn" onclick="speak('${id}',0.65)">🐢 Slow</button>`;
+  if(it.type==="q") acts+=`<button class="sbtn" onclick="speakText(ITEMS['${id}'].q,0.9)">🔊 Question</button>`;
   acts+=recNow?`<button class="sbtn mic rec" onclick="toggleRec('${id}')">⏹ Stop</button>`
              :`<button class="sbtn mic" onclick="toggleRec('${id}')" ${working?"disabled":""}>🎙️ ${R?"Try again":"Record"}</button>`;
-  if(it.type==="o"&&!reveal&&!st.hint) acts+=`<button class="sbtn" onclick="showHint('${id}')">💡 Hint</button>`;
+  if((it.type==="o"||it.type==="q"||it.type==="d")&&!reveal&&!st.hint) acts+=`<button class="sbtn" onclick="showHint('${id}')">💡 ${it.type==="o"?"Hint":"Topic words"}</button>`;
   if(it.type!=="p"&&reveal) acts+=`<button class="sbtn" onclick="speak('${id}',0.9)">🔊 Listen</button>`;
   if(st.url&&!recNow&&!working) acts+=`<button class="sbtn" onclick="playMine('${id}')">▶ My voice</button>`;
   let out="";
@@ -637,7 +689,11 @@ function resultHtml(it,st,reveal){
   const R=st.res, mf=msgFor(R.score), cls=R.pass?"hi":mf[0];
   let msg=R.pass?mf[1]:(it.type==="c"&&R.chosen&&R.chosen!=="ok")?"✗ Not quite.":mf[1];
   let lines="";
-  if(it.type==="o"){
+  if(it.type==="q"||it.type==="d"){
+    lines=`<div class="res-line">${R.pass?"✓ Great answer!":"Topic words: <b>"+R.got+" / "+R.need+"</b> needed · words spoken: <b>"+R.n+" / "+it.min+"</b>"}</div>`;
+    if(!R.pass) lines+=`<div class="sp-hint">${R.got<R.need?"Talk about more of the topic — press 💡 Topic words for ideas.":"Say a little more: add a reason or an example."}</div>`;
+    lines+=`<div class="kw">${it.keys.map((g,k)=>`<span class="${R.hit[k]?"hit":""}">${esc(g[0])}</span>`).join("")}</div>`;
+  } else if(it.type==="o"){
     lines=R.pass?`<div class="res-line">✓ Correct order!</div>`
       :R.moved?`<div class="res-line">↕ Check the order of the words. <span class="es">Revisa el orden de las palabras.</span></div>`
       :`<div class="res-line">Some words are missing or not clear. <span class="es">Faltan palabras o no se escucharon bien.</span></div>`;
@@ -647,7 +703,7 @@ function resultHtml(it,st,reveal){
     else if(R.chosen) lines=`<div class="res-line">✗ You said <b>${esc(R.chosen)}</b>. ${reveal?`The correct word is <b>${esc(it.a)}</b>.`:`Try another option. <span class="es">Prueba otra opción.</span>`}</div>`;
     else lines=`<div class="res-line">We couldn't hear the missing word clearly. <span class="es">No escuchamos bien la palabra que falta.</span></div>`;
   }
-  if(!R.pass&&!reveal) lines+=`<div class="sp-hint">After 2 attempts you will see the answer. · Después de 2 intentos verás la respuesta.</div>`;
+  if(!R.pass&&!reveal) lines+=`<div class="sp-hint">${tx(it.type==="q"||it.type==="d"?"After 2 attempts you will see a model answer.":"After 2 attempts you will see the answer.","After 2 attempts you will see the answer. · Después de 2 intentos verás la respuesta.")}</div>`;
   const legend=it.type==="p"?`<div class="legend"><span class="l-ok">clear</span><span class="l-close">almost</span><span class="l-miss">missing / different</span></div>`:"";
   return `<div class="res"><div class="res-top"><span class="pill ${cls}">${R.score}</span><span class="res-msg ${cls}">${msg}</span></div>
     ${lines}<div class="heard">We heard: “<i>${esc(R.heard)}</i>”</div>${legend}</div>`;
@@ -665,6 +721,7 @@ function pickVoice(){
   return VOICE;
 }
 if("speechSynthesis" in window) speechSynthesis.onvoiceschanged=()=>{ VOICE=null; };
+function speakText(t,rate){ if(!("speechSynthesis" in window)) return; speechSynthesis.cancel(); const u=new SpeechSynthesisUtterance(t); u.lang="en-US"; u.rate=rate||0.9; const v=pickVoice(); if(v) u.voice=v; speechSynthesis.speak(u); }
 function speak(id,rate){
   if(!("speechSynthesis" in window)){ alert("Tu navegador no puede leer frases en voz alta."); return; }
   speechSynthesis.cancel();
@@ -696,7 +753,7 @@ function loadASR(){
 function modelText(){
   if(ASR.status==="ready") return `✓ <b>Voice recognition ready.</b> <span class="es">Reconocimiento de voz listo.</span>`;
   if(ASR.status==="loading") return `⏳ <b>Preparing voice recognition… ${ASR.pct}%</b> — only the first time. <span class="es">Se descarga solo la primera vez (puede tardar 1–2 minutos).</span><div class="mbar"><i style="width:${ASR.pct}%"></i></div>`;
-  if(ASR.status==="error") return `⚠️ No se pudo descargar el reconocimiento de voz. Revisa tu conexión a internet y <button class="linkbtn" onclick="location.reload()">recarga la página</button>.`;
+  if(ASR.status==="error") return tx(`⚠️ Voice recognition could not be downloaded. Check your internet connection and <button class="linkbtn" onclick="location.reload()">reload the page</button>.`,`⚠️ No se pudo descargar el reconocimiento de voz. Revisa tu conexión a internet y <button class="linkbtn" onclick="location.reload()">recarga la página</button>.`);
   return `Voice recognition downloads automatically the first time you practise. <span class="es">El reconocimiento de voz se descarga solo la primera vez.</span>`;
 }
 function paintModel(){
@@ -707,26 +764,26 @@ function paintModel(){
 }
 
 /* ---- microphone ---- */
-const NO_SPEECH="🎙️ We didn't hear you. Speak a little louder, close to the microphone. · No te escuchamos: habla un poco más fuerte y cerca del micrófono.";
+const NO_SPEECH=tx("🎙️ We didn't hear you. Speak a little louder, close to the microphone.","🎙️ We didn't hear you. Speak a little louder, close to the microphone. · No te escuchamos: habla un poco más fuerte y cerca del micrófono.");
 function openTabLink(){
   const u=APP_URL||(/^https?:/.test(location.href)&&!/googleusercontent|sites\.google/.test(location.hostname)?location.href:"");
-  return u?` <a href="${esc(u)}" target="_blank" rel="noopener">Abrir la práctica en una pestaña nueva ↗</a>`:"";
+  return u?` <a href="${esc(u)}" target="_blank" rel="noopener">${tx("Open the practice in a new tab ↗","Abrir la práctica en una pestaña nueva ↗")}</a>`:"";
 }
 function micPrecheck(){
-  if(!window.isSecureContext) return "🔒 El micrófono solo funciona si la página se abre con <b>https://</b>."+openTabLink();
-  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia) return "🔒 Este navegador no permite usar el micrófono aquí."+openTabLink();
-  if(typeof MediaRecorder==="undefined") return "Tu navegador no puede grabar audio. Usa Chrome, Edge o Safari actualizados.";
+  if(!window.isSecureContext) return tx("🔒 The microphone only works when the page opens with <b>https://</b>.","🔒 El micrófono solo funciona si la página se abre con <b>https://</b>.")+openTabLink();
+  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia) return tx("🔒 This browser cannot use the microphone here.","🔒 Este navegador no permite usar el micrófono aquí.")+openTabLink();
+  if(typeof MediaRecorder==="undefined") return tx("Your browser cannot record audio. Use an up-to-date Chrome, Edge or Safari.","Tu navegador no puede grabar audio. Usa Chrome, Edge o Safari actualizados.");
   return null;
 }
 function micErrorMsg(e){
   const n=e&&e.name||"";
   if(n==="NotAllowedError"||n==="SecurityError"||n==="PermissionDeniedError"){
-    if(IN_FRAME) return "🔒 El micrófono está bloqueado dentro de esta página."+(openTabLink()||" Abre la práctica en una pestaña nueva.");
-    return "🔒 No hay permiso para usar el micrófono. Haz clic en el candado 🔒 junto a la dirección web, elige <b>Permitir</b> micrófono y vuelve a intentarlo.";
+    if(IN_FRAME) return tx("🔒 The microphone is blocked inside this page.","🔒 El micrófono está bloqueado dentro de esta página.")+(openTabLink()||tx(" Open the practice in a new tab."," Abre la práctica en una pestaña nueva."));
+    return tx("🔒 No permission to use the microphone. Click the lock 🔒 next to the web address, choose <b>Allow</b> microphone and try again.","🔒 No hay permiso para usar el micrófono. Haz clic en el candado 🔒 junto a la dirección web, elige <b>Permitir</b> micrófono y vuelve a intentarlo.");
   }
-  if(n==="NotFoundError"||n==="DevicesNotFoundError") return "🎙️ No encontramos un micrófono. Conecta uno (o usa audífonos con micrófono) e inténtalo de nuevo.";
-  if(n==="NotReadableError"||n==="TrackStartError") return "🎙️ Otra aplicación está usando el micrófono (Zoom, Teams, Meet…). Ciérrala e inténtalo de nuevo.";
-  return "No se pudo usar el micrófono: "+esc(e&&e.message||n);
+  if(n==="NotFoundError"||n==="DevicesNotFoundError") return tx("🎙️ We couldn't find a microphone. Connect one (or use a headset) and try again.","🎙️ No encontramos un micrófono. Conecta uno (o usa audífonos con micrófono) e inténtalo de nuevo.");
+  if(n==="NotReadableError"||n==="TrackStartError") return tx("🎙️ Another app is using the microphone (Zoom, Teams, Meet…). Close it and try again.","🎙️ Otra aplicación está usando el micrófono (Zoom, Teams, Meet…). Ciérrala e inténtalo de nuevo.");
+  return tx("The microphone could not be used: ","No se pudo usar el micrófono: ")+esc(e&&e.message||n);
 }
 let rec=null, busyId=null;
 function setBusy(id){ busyId=id; document.body.classList.toggle("busy",!!id); }
@@ -744,7 +801,8 @@ async function toggleRec(id){
   const AC=window.AudioContext||window.webkitAudioContext, ctx=new AC();
   try{ await ctx.resume(); }catch(e){}
   const an=ctx.createAnalyser(); an.fftSize=512; ctx.createMediaStreamSource(stream).connect(an);
-  const mr=new MediaRecorder(stream), r={id,stream,ctx,an,mr,chunks:[],t0:Date.now(),speech:false,sp0:0,sil:null,floor:0.01,raf:0};
+  const free=ITEMS[id].type==="q"||ITEMS[id].type==="d";
+  const mr=new MediaRecorder(stream), r={id,stream,ctx,an,mr,chunks:[],t0:Date.now(),speech:false,sp0:0,sil:null,floor:0.01,raf:0,silMs:free?3000:1600,maxMs:free?60000:15000};
   mr.ondataavailable=e=>{ if(e.data&&e.data.size) r.chunks.push(e.data); };
   mr.onstop=()=>finishRec(r);
   rec=r; mr.start(); st.state="rec"; renderItem(id); vad(r);
@@ -760,8 +818,8 @@ function vad(r){
     if(el<300) r.floor=Math.max(r.floor,rms);
     const th=Math.max(r.floor*2.5,0.015);
     if(rms>th){ if(!r.speech){ r.speech=true; r.sp0=Date.now(); } r.sil=null; }
-    else if(r.speech){ if(r.sil===null) r.sil=Date.now(); if(Date.now()-r.sil>1600&&Date.now()-r.sp0>500) return stopRec(); }
-    if(el>15000) return stopRec();
+    else if(r.speech){ if(r.sil===null) r.sil=Date.now(); if(Date.now()-r.sil>r.silMs&&Date.now()-r.sp0>500) return stopRec(); }
+    if(el>r.maxMs) return stopRec();
     if(!r.speech&&el>8000){ r.noSpeech=true; return stopRec(); }
     const lv=document.getElementById("lvl_"+r.id); if(lv) lv.style.width=Math.min(100,rms*400)+"%";
     const tm=document.getElementById("tm_"+r.id); if(tm) tm.textContent=Math.floor(el/1000)+"s";
@@ -791,8 +849,8 @@ async function finishRec(r){
     await transcribe(id,blob);
   }catch(e){
     st.state=null;
-    st.err=e&&e.user?e.user:ASR.status==="error"?"⚠️ No se pudo descargar el reconocimiento de voz. Revisa tu conexión a internet y vuelve a intentarlo."
-      :"⚠️ No se pudo procesar el audio: "+esc(e&&e.message||e);
+    st.err=e&&e.user?e.user:ASR.status==="error"?tx("⚠️ Voice recognition could not be downloaded. Check your internet connection and try again.","⚠️ No se pudo descargar el reconocimiento de voz. Revisa tu conexión a internet y vuelve a intentarlo.")
+      :tx("⚠️ The audio could not be processed: ","⚠️ No se pudo procesar el audio: ")+esc(e&&e.message||e);
   }
   setBusy(null); renderItem(id); paintSession();
 }
@@ -819,7 +877,7 @@ async function transcribe(id,blob){
   const asr=await loadASR();
   st.state="proc"; renderItem(id);
   await new Promise(r=>setTimeout(r,30));
-  const out=await asr(audio);
+  const out=await asr(audio, audio.length>16000*28?{chunk_length_s:30,stride_length_s:5}:{});
   const text=String(out&&out.text||"").replace(/\[[^\]]*\]|\([^)]*\)/g," ").replace(/\s+/g," ").trim();
   const low=text.toLowerCase().replace(/[.!?,]/g,"").trim();
   if(!toks(text).length||["you","thank you","thanks for watching","thanks","bye"].includes(low)) throw {user:NO_SPEECH};
@@ -849,6 +907,10 @@ async function testMic(){
 }
 
 /* ---- start ---- */
+(()=>{ const sb=document.querySelector("header .sub"); if(sb) sb.textContent=(LV2?"Intensive English Workshop":"English Workshop")+" · Speaking Practice "+LVNAME;
+  const ph=document.querySelector(".progress-head"); if(ph) ph.innerHTML='<b id="pgCount">0 / '+TOTAL+'</b>'+(LV2?"items":"phrases")+" mastered";
+  const ft=document.querySelector("footer"); if(ft&&LV2) ft.innerHTML='<b>TRONWELL</b> · Intensive English Workshop · Speaking Practice A2–B1 · 4 Units · 12 Lessons · '+TOTAL+' Items<br>🔒 Your voice is processed on your device — it is not sent to any server.<br><span class="reset-link" onclick="resetProgress()">Reset my progress</span>';
+  const lnk=document.querySelectorAll(".how .es,.sys .es"); })();
 (()=>{ const u=parseInt(new URLSearchParams(location.search).get("unit"),10); if(u>=1&&u<=UNITS.length) openUnit(u); else goHome(); })();
 </script>
 </body></html>
